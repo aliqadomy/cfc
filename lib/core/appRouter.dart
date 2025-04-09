@@ -6,22 +6,6 @@ import 'package:cfc_main/infrastructure/data_soruce/visitor/visitorProvider.dart
 import 'package:cfc_main/infrastructure/repository/my_wallet_repo/my_wallet_repo.dart';
 import 'package:cfc_main/infrastructure/repository/opportunityRepo/opportunityRepo.dart';
 import 'package:cfc_main/infrastructure/repository/visitorRepo.dart';
-import 'package:cfc_main/presintation%20/auth/change_password/change_password.dart';
-import 'package:cfc_main/presintation%20/auth/change_password/change_password_bloc.dart';
-import 'package:cfc_main/presintation%20/auth/login/login_bloc.dart';
-import 'package:cfc_main/presintation%20/auth/regestration/regestrationBorrowerScreen.dart';
-import 'package:cfc_main/presintation%20/auth/splashScreen/splashScreen.dart';
-import 'package:cfc_main/presintation%20/home/MyOpportunities/opportunityDetails/campgainAttachmentBloc/attachment_bloc.dart';
-import 'package:cfc_main/presintation%20/home/MyOpportunities/opportunityDetails/investBloc/invest_bloc.dart';
-import 'package:cfc_main/presintation%20/home/MyOpportunities/opportunityDetails/opportunityDetails.dart';
-import 'package:cfc_main/presintation%20/home/MyOpportunities/opportunityDetails/opporunityDetailsAndAttachment.dart';
-import 'package:cfc_main/presintation%20/home/Settings/notification/notification_screen.dart';
-import 'package:cfc_main/presintation%20/home/dashboard/accountNumberBloc/account_number_bloc.dart';
-import 'package:cfc_main/presintation%20/home/dashboard/nearestDate/nearest_date_bloc.dart';
-import 'package:cfc_main/presintation%20/home/mainHome/mainHome.dart';
-import 'package:cfc_main/presintation%20/home/wallet/finicalDetails/finicalDetails.dart';
-import 'package:cfc_main/presintation%20/onBoarding/onBoarding.dart';
-import 'package:cfc_main/presintation%20/visitor/visitor_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,15 +18,32 @@ import '../infrastructure/repository/DashBoardRepo.dart';
 import '../infrastructure/repository/ResetPassRepo.dart';
 import '../infrastructure/repository/loginRepo.dart';
 import '../infrastructure/repository/registerRepo.dart';
-import '../presintation /auth/login/screen/login.dart';
-import '../presintation /auth/regestration/regestrationInvestorScreen.dart';
-import '../presintation /auth/regestration/regestration_bloc.dart';
-import '../presintation /home/MyOpportunities/WebViewPage.dart';
-import '../presintation /home/MyOpportunities/opportunityDetails/oppourtintyDataDetailsBloc/oppourtunity_data_details_bloc.dart';
-import '../presintation /home/dashboard/InvestorBloc/dash_board_bloc.dart';
-import '../presintation /home/dashboard/dashboardScreen.dart';
-import '../presintation /visitor/visitorScreen.dart';
-import '../presintation /welcome/welcomePage.dart';
+import '../presintation/auth/change_password/change_password.dart';
+import '../presintation/auth/change_password/change_password_bloc.dart';
+import '../presintation/auth/login/login_bloc.dart';
+import '../presintation/auth/login/screen/login.dart';
+import '../presintation/auth/regestration/regestrationBorrowerScreen.dart';
+import '../presintation/auth/regestration/regestrationInvestorScreen.dart';
+import '../presintation/auth/regestration/regestration_bloc.dart';
+import '../presintation/auth/splashScreen/splashScreen.dart';
+import '../presintation/home/MyOpportunities/WebViewPage.dart';
+import '../presintation/home/MyOpportunities/opportunityDetails/campgainAttachmentBloc/attachment_bloc.dart';
+import '../presintation/home/MyOpportunities/opportunityDetails/investBloc/invest_bloc.dart';
+import '../presintation/home/MyOpportunities/opportunityDetails/opportunityDetails.dart';
+import '../presintation/home/MyOpportunities/opportunityDetails/opporunityDetailsAndAttachment.dart';
+import '../presintation/home/MyOpportunities/opportunityDetails/oppourtintyDataDetailsBloc/oppourtunity_data_details_bloc.dart';
+import '../presintation/home/Settings/notification/notification_screen.dart';
+import '../presintation/home/dashboard/InvestorBloc/dash_board_bloc.dart';
+import '../presintation/home/dashboard/accountNumberBloc/account_number_bloc.dart';
+import '../presintation/home/dashboard/dashboardScreen.dart';
+import '../presintation/home/dashboard/nearestDate/nearest_date_bloc.dart';
+import '../presintation/home/mainHome/mainHome.dart';
+import '../presintation/home/wallet/finicalDetails/finicalDetails.dart';
+import '../presintation/onBoarding/onBoarding.dart';
+import '../presintation/visitor/visitorScreen.dart';
+import '../presintation/visitor/visitor_bloc.dart';
+import '../presintation/welcome/welcomePage.dart';
+
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -68,7 +69,7 @@ class AppRouter {
               create: (context) => LoginBloc(
                   loginRepo: LoginRepo(
                       loginAuthProvider: LoginAuthProvider(dio: Dio()))),
-              child: LoginScreen(),
+              child: const LoginScreen(),
             ),
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: LoginScreen.routename));
@@ -79,7 +80,7 @@ class AppRouter {
               create: (context) => RegestrationBloc(
                   registerRepo: RegisterRepo(
                       regAuthProvider: RegAuthProvider(dio: Dio()))),
-              child: RegestrationBorrowerscreen(),
+              child: const RegestrationBorrowerscreen(),
             ),
             type: PageTransitionType.fade,
             settings: const RouteSettings(
@@ -199,7 +200,7 @@ class AppRouter {
                 create: (context) => ChangePasswordBloc(
                     resetPassRepo:
                         ResetPassRepo(resetAuth: ResetAuth(dio: Dio()))),
-                child: ChangePassword()),
+                child: const ChangePassword()),
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: ChangePassword.routename));
 
