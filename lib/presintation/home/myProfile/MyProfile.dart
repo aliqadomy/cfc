@@ -40,7 +40,46 @@ class _MyprofileState extends State<Myprofile> {
             child: ListView(shrinkWrap: true, children: [
               BlocBuilder<KycBloc, KycState>(builder: (context, state) {
                 if (state is KycStateSuccess) {
-                  return Stepper(
+                  return state.list[1].infoType![0]
+                      .detail![5].value==null?
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10,top: 100),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircleAvatar(
+                          radius: 70,
+                          child: Icon(
+                            Icons.person,
+                            size: 100,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Customtextinput(
+                          hintText: username,
+                          secure: false,
+                          readOnly: true,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Customtextinput(
+                          hintText: mobileNumber,
+                          secure: false,
+                          readOnly: true,
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.2),
+                        Text(
+                          AppLocalizations.of(context)!.applyNow,
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      ],
+                    ),
+                  ):Stepper(
                       physics: const ClampingScrollPhysics(),
                       type: StepperType.vertical,
                       currentStep: currentStep,

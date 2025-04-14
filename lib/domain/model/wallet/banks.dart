@@ -29,6 +29,7 @@ class Banks {
       throw RangeError("Index $index is out of range for banks list.");
     }
     var bank = banks[index];
+
     return bank['bic']!;
   }
 }

@@ -17,19 +17,33 @@ part 'withdraw_state.dart';
 class WithdrawBloc extends Bloc<WithdrawEvent, WithdrawState> {
   MyWalletRepo myWalletRepo;
   WithdrawBloc({required this.myWalletRepo}) : super(WithdrawInitial()) {
-    on<WithdrawEvent>((event, emit)async {
-      if(event is WithdrawEvents)
-        {
+    on<WithdrawEvent>((event, emit) async {
+      if (event is WithdrawEvents) {
+        var response = await myWalletRepo.userKyc();
 
-          var response =await myWalletRepo.userKyc();
-          response.fold((e)=>emit(UserKycStateFaield(errMsg:e.toString())), (s)=>emit(UserKycStateSuccess(userKyc: s,bic:Banks.getBankAtIndex(int.parse(s.infoType![1].detail![1].value!))!)));
-        }else if(event is WithdrawBalance)
-          {
-            var response =await myWalletRepo.paymentWithdraw(event.amount,event.creditAccount,event.bic);
+        response.fold(
+            (e) => emit(UserKycStateFaield(errMsg: e.toString())),
+            (s) {
+              final value = s.infoType?[1].detail?[1].value;
 
-            response.fold((e)=>emit(WithdrawBalanceStateFaield(errMsg:e.toString())), (s)=>emit(WithdrawBalanceStateSuccess(withDrawBalance: s)));
+              if (value == null) {
+                emit(UserKycStateFaield(errMsg: "There is no account bank"));
+                return; // Prevent further execution
+              }
+              emit(
 
-          }
+                  UserKycStateSuccess(
+                  userKyc: s,
+                  bic: Banks.getBankAtIndex(
+                      int.parse(s.infoType?[1].detail?[1].value ?? ""))));
+            });
+      } else if (event is WithdrawBalance) {
+        var response = await myWalletRepo.paymentWithdraw(
+            event.amount, event.creditAccount, event.bic);
+        response.fold(
+            (e) => emit(WithdrawBalanceStateFaield(errMsg: e.toString())),
+            (s) => emit(WithdrawBalanceStateSuccess(withDrawBalance: s)));
+      }
     });
   }
 }

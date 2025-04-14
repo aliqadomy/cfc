@@ -108,8 +108,7 @@ class _WalletscreenState extends State<Walletscreen> {
                           ],
                         ),
                       );
-                    }
-                    else {
+                    } else {
                       return Container(
                         width: MediaQuery.of(context).size.width * 0.8,
                         height: MediaQuery.of(context).size.height * 0.14,
@@ -193,8 +192,7 @@ class _WalletscreenState extends State<Walletscreen> {
                                               Navigator.pop(
                                                   context); // Close bottom sheet
                                             });
-                                          }
-                                          else if (state
+                                          } else if (state
                                               is WithdrawBalanceStateFaield) {
                                             withdrawMsg = state.errMsg;
                                             ShowToastWidget.showToast(
@@ -206,7 +204,24 @@ class _WalletscreenState extends State<Walletscreen> {
                                             });
                                           }
                                         },
-                                        child: Container(
+                                        child:   userKyc
+                                            ?.infoType?[
+                                        1]
+                                            .detail?[
+                                        0]
+                                            .value ==
+                                            null
+                                            ?  Container(
+                                          alignment: Alignment.center,
+                                            padding: const EdgeInsets.all(8),
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                0.33,
+                                            width:
+                                            MediaQuery.of(context).size.width,
+                                            child:Text("No Wallet Available"))
+                                            :Container(
                                           padding: EdgeInsets.all(8),
                                           height: MediaQuery.of(context)
                                                   .size
@@ -246,12 +261,24 @@ class _WalletscreenState extends State<Walletscreen> {
                                                             Colors.white)
                                                       ],
                                                     ),
-                                                    Text(
-                                                      '${AppLocalizations.of(context)!.accNum} : ${userKyc!.infoType![1].detail![0].value!}',
-                                                    ),
-                                                    Text(
-                                                      '${AppLocalizations.of(context)?.bank??""} : ${Banks.getBankAtIndex(int.parse(userKyc!.infoType![1].detail![1].value!) - 1)??""}',
-                                                    ),
+                                                    userKyc
+                                                                ?.infoType?[1]
+                                                                .detail?[0]
+                                                                .value ==
+                                                            null
+                                                        ? SizedBox()
+                                                        : Text(
+                                                            '${AppLocalizations.of(context)!.accNum} : ${userKyc!.infoType![1].detail![0].value!}',
+                                                          ),
+                                                    userKyc
+                                                                ?.infoType?[1]
+                                                                .detail?[1]
+                                                                .value ==
+                                                            null
+                                                        ? SizedBox()
+                                                        : Text(
+                                                            '${AppLocalizations.of(context)?.bank ?? ""} : ${Banks.getBankAtIndex(int.parse(userKyc!.infoType![1].detail![1].value!) - 1) ?? ""}',
+                                                          ),
                                                     Form(
                                                       key: _formKey,
                                                       child: Column(
@@ -296,47 +323,42 @@ class _WalletscreenState extends State<Walletscreen> {
                                                             icon: const Icon(Icons
                                                                 .swap_vert_outlined),
                                                           ),
-                                                          CustomButton(
-                                                            colors:
-                                                                AppColors.green,
-                                                            title:
-                                                                "${AppLocalizations.of(innerContext)?.withdraw}",
-                                                            onTap: () {
-                                                              if (_formKey
-                                                                  .currentState!
-                                                                  .validate()) {
-                                                                setState(() {
-                                                                  isLoading =
-                                                                      false;
-                                                                });
-                                                                BlocProvider.of<
-                                                                            WithdrawBloc>(
-                                                                        innerContext)
-                                                                    .add(
-                                                                  WithdrawBalance(
-                                                                    amount:
-                                                                        balanceText
-                                                                            .text,
-                                                                    creditAccount: userKyc!
-                                                                        .infoType![
-                                                                            1]
-                                                                        .detail![
-                                                                            0]
-                                                                        .value
-                                                                        .toString(),
-                                                                    bic: Banks.getBankAtIndex(int.parse(userKyc!
-                                                                            .infoType![1]
-                                                                            .detail![1]
-                                                                            .value!) -
-                                                                        1),
-                                                                  ),
-                                                                );
-                                                              } else {
-                                                                print(
-                                                                    "Validation Failed");
-                                                              }
-                                                            },
-                                                          ),
+                                                         CustomButton(
+                                                                  colors:
+                                                                      AppColors
+                                                                          .green,
+                                                                  title:
+                                                                      "${AppLocalizations.of(innerContext)?.withdraw}",
+                                                                  onTap: () {
+                                                                    if (_formKey
+                                                                        .currentState!
+                                                                        .validate()) {
+                                                                      setState(
+                                                                          () {
+                                                                        isLoading =
+                                                                            false;
+                                                                      });
+                                                                      BlocProvider.of<WithdrawBloc>(
+                                                                              innerContext)
+                                                                          .add(
+                                                                        WithdrawBalance(
+                                                                          amount:
+                                                                              balanceText.text,
+                                                                          creditAccount: userKyc!
+                                                                              .infoType![1]
+                                                                              .detail![0]
+                                                                              .value
+                                                                              .toString(),
+                                                                          bic: Banks.getBankAtIndex(int.parse(userKyc!.infoType![1].detail![1].value!) -
+                                                                              1),
+                                                                        ),
+                                                                      );
+                                                                    } else {
+                                                                      print(
+                                                                          "Validation Failed");
+                                                                    }
+                                                                  },
+                                                                ),
                                                         ],
                                                       ),
                                                     ),

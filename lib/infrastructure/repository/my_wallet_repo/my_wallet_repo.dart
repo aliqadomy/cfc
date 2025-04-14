@@ -96,6 +96,7 @@ Future<Either<dynamic, InvestResponse>> invest(String amount,String invester,Str
     try {
       List<UserKycModel> userKyc=[] ;
       final response = await myWalletprovider.userKyc();
+
       if (response.data['status'] == false) {
         return Left(AppException(response.data['response']['message'] ?? 'Unknown error occurred'));
       }
@@ -105,12 +106,10 @@ Future<Either<dynamic, InvestResponse>> invest(String amount,String invester,Str
         userKyc.add(UserKycModel.fromJson(item));
       }
       id=userKyc.firstWhere((i)=>i.id==4);
-      print("test id $id");
       return Right(id);
 
     } on DioException catch (e) {
-      print('DioException: ${e.message}');
-      print('Response: ${e.response?.data}');
+
       return Left(AppException.fromDioError(e));
     } catch (error) {
       return Left(AppException(error.toString()));

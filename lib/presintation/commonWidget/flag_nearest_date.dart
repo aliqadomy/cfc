@@ -30,14 +30,13 @@ class NearestDateFlag extends StatelessWidget {
             Container(
               padding: const EdgeInsets.only(left: 30,right: 12),
               alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width*0.4,
+              width: MediaQuery.of(context).size.width*0.3,
               height: 45,
               color: AppColors.white,
               child:  Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("${nearestDateModel??"0"}",textAlign: TextAlign.center,),
-                  const SizedBox(width: 5,),
                   haveSign?AppColors.saudiSign(AppColors.black):const SizedBox()
                 ],
               ),

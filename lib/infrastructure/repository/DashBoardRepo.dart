@@ -55,6 +55,7 @@ class DashboardRepo extends Dashboardinterface
   Future<Either<dynamic, NearestDateModel>> nearestDate() async{
     try {
       final response = await mainHomeProvider.nearestDateData();
+      print("pppooooo $response");
       if (response.data['status'] == false) {
         return Left(AppException(response.data['response']['message'] ?? 'Unknown error occurred'));
       }
@@ -62,7 +63,7 @@ class DashboardRepo extends Dashboardinterface
       return Right(nearestDate);
 
     } on DioException catch (e) {
-      print("hereee now ${e.message}");
+      print("hereee now1111222 ${e.message}");
 
       return Left(AppException.fromDioError(e));
     } catch (error) {

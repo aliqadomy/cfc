@@ -85,8 +85,8 @@ class LanguageManager {
 class DioHelper{
   static Dio? _dio;
   static init() {
-    _dio = Dio(
 
+    _dio = Dio(
       BaseOptions(
           baseUrl: Urls.BASE_URL,
           receiveDataWhenStatusError: true,
@@ -116,7 +116,7 @@ class DioHelper{
        String languageCode=LanguageManager._languageCode;
         options.headers["Accept-Language"] = languageCode;
 
-
+        print("yyyyyyyyyyyyyyyyyyyyyyyyyyyzzzzz $token");
         return handler.next(options);
       },
     ));

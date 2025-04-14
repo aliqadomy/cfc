@@ -41,14 +41,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
         child: BlocListener<NearestDateBloc, NearestDateState>(
             listener: (BuildContext context, NearestDateState state) {
               if (state is NearestDateSuccess) {
-                print("hereee now");
+                print("hereee nowsss0s");
            setState(() {
              isLoading = false;
 
          });
               } else if (state is NearestDateFailed) {
-                print("hereee now ${state.errMsg}");
-                ShowToastWidget.showToast("some thing is wrong");
+                setState(() {
+                  isLoading = false;
+                });
+                print("hereee nowssss1 ${state.errMsg}");
               } else {
                 setState(() {
                   isLoading = true;
@@ -404,43 +406,48 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                           nearestDateModel: null,
                                           title:
                                               AppLocalizations.of(context)!.id,
+                                          haveSign: true,
                                         ),
                                         NearestDateFlag(
                                           nearestDateModel: null,
                                           title: AppLocalizations.of(context)!
                                               .opiNum,
+                                          haveSign: true,
                                         ),
                                         NearestDateFlag(
                                           nearestDateModel: null,
                                           title: AppLocalizations.of(context)!
                                               .invNum,
+                                          haveSign: true,
                                         ),
                                         NearestDateFlag(
                                           nearestDateModel: null,
                                           title: AppLocalizations.of(context)!
                                               .amoPaid,
+                                          haveSign: true,
                                         ),
                                         NearestDateFlag(
                                           nearestDateModel: null,
                                           title: AppLocalizations.of(context)!
                                               .income,
+                                          haveSign: true,
                                         ),
                                         NearestDateFlag(
                                             nearestDateModel: null,
                                             title: AppLocalizations.of(context)!
-                                                .tax),
+                                                .tax,          haveSign: true,),
                                         NearestDateFlag(
                                             nearestDateModel: null,
                                             title: AppLocalizations.of(context)!
-                                                .fees),
+                                                .fees,          haveSign: true,),
                                         NearestDateFlag(
                                             nearestDateModel: null,
                                             title: AppLocalizations.of(context)!
-                                                .total),
+                                                .total,          haveSign: true,),
                                         NearestDateFlag(
                                             nearestDateModel: null,
                                             title: AppLocalizations.of(context)!
-                                                .date),
+                                                .date,          haveSign: true,),
                                       ]),
                                     )
                                   ],
