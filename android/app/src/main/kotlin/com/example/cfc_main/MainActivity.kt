@@ -1,4 +1,4 @@
-package com.example.cfc_main
+package com.qadomy.cfc
 
 import io.flutter.embedding.android.FlutterActivity
 

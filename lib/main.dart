@@ -17,11 +17,19 @@ import 'core/notification_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DioHelper.init();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    name: 'CFC - التنافسية المالية',
+      options: const FirebaseOptions(
+        apiKey: 'AIzaSyCDQCyD00JK_KjH9Hx5Mu0xzddlwhRDXKE',
+        appId: '1:897114328485:ios:3a5476cc8f070762782c4c',
+        messagingSenderId: '897114328485',
+        projectId: 'cfca-23a75',
+        storageBucket: 'cfca-23a75.firebasestorage.app',
+      )
+  );
   NotificationService notificationService = NotificationService();
   notificationService.requestNotificationPermission();
   notificationService.firebaseInit();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingOnBackGroundHandler);
 
   // Initialize the app
   runApp(BlocProvider(
@@ -29,17 +37,7 @@ void main() async {
     child: MyApp(),
   ));
 }
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingOnBackGroundHandler(RemoteMessage message)async{
-  await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyCDQCyD00JK_KjH9Hx5Mu0xzddlwhRDXKE',
-        appId: '1:897114328485:ios:3a5476cc8f070762782c4c',
-        messagingSenderId: '897114328485',
-        projectId: 'cfca-23a75',
-        storageBucket: 'cfca-23a75.firebasestorage.app',
-      ));
-}
+
 
 class MyApp extends StatefulWidget {
   @override
