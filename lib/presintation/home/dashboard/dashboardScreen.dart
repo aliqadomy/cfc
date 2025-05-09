@@ -41,16 +41,13 @@ class _DashboardscreenState extends State<Dashboardscreen> {
         child: BlocListener<NearestDateBloc, NearestDateState>(
             listener: (BuildContext context, NearestDateState state) {
               if (state is NearestDateSuccess) {
-                print("hereee nowsss0s");
            setState(() {
              isLoading = false;
-
          });
               } else if (state is NearestDateFailed) {
                 setState(() {
                   isLoading = false;
                 });
-                print("hereee nowssss1 ${state.errMsg}");
               } else {
                 setState(() {
                   isLoading = true;

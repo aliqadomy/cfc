@@ -30,4 +30,27 @@ class ResetPassRepo {
       return Left(AppException(error.toString()));
     }
   }
+
+  Future<Either<dynamic, dynamic>> changePasswordOtp(String email, String password, String confirmPassword)async {
+    final response = await resetAuth.changePasswordOtp(email, password, confirmPassword);
+    try {
+      if (response.data == false) {
+        return Left(AppException(response.data ?? 'Unknown error occurred'));
+      }
+      if(response.data['status']!=false)
+      {
+        final responseUser = response.data['response'];
+        return Right(responseUser);
+      }
+      return Left(response.data['response']);
+
+
+    } on DioException catch (e) {
+
+      return Left(AppException.fromDioError(e));
+    } catch (error) {
+
+      return Left(AppException(error.toString()));
+    }
+  }
 }

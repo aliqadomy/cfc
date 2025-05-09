@@ -1,4 +1,5 @@
 import 'package:cfc_main/domain/model/MeModel.dart';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,6 @@ class LoginRepo extends Logininterface {
         return Left(AppException(response.data['response']['message'] ?? 'Unknown error occurred'));
       }
       final responseUser = ResponseUser.fromJson(response.data['response']);
-      print("$responseUser");
       await  storage.setString("token",responseUser.token!);
       await  storage.setString("name",responseUser.name??responseUser.username!);
       await storage.setString("mobile",responseUser.mobileNumber??"");
@@ -31,6 +31,8 @@ class LoginRepo extends Logininterface {
       await  storage.setString("email",responseUser.email!);
       await storage.setInt("status",responseUser.status??0);
       await storage.setString("password",password);
+      await storage.setString("remeberToken",responseUser.remember_token??"");
+      await storage.setString("refreshExpires",responseUser.refresh_token_expires_at??"");
       return Right(responseUser);
 
     } on DioException catch (e) {
@@ -59,5 +61,33 @@ class LoginRepo extends Logininterface {
     }
   }
 
+  @override
+  Future<Either<dynamic, ResponseUser>> refreshTokenApi(String? rememberToken) async{
+    try {
 
+      final storage=await SharedPreferences.getInstance();
+
+      final response = await loginAuthProvider.refreshTokenApi(rememberToken!);
+
+      if (response.data['status'] == false) {
+        return Left(AppException(response.data['response']['message'] ?? 'Unknown error occurred'));
+      }
+
+      final responseUser = ResponseUser.fromJson(response.data['response']);
+      await  storage.setString("token",responseUser.token!);
+      await  storage.setString("name",responseUser.name??responseUser.username!);
+      await storage.setString("mobile",responseUser.mobileNumber??"");
+      await  storage.setString("name",responseUser.name??responseUser.username!);
+      await  storage.setString("email",responseUser.email!);
+      await storage.setInt("status",responseUser.status??0);
+      await storage.setString("remeberToken",responseUser.remember_token??"");
+      await storage.setString("refreshExpires",responseUser.refresh_token_expires_at??"");
+      return Right(responseUser);
+
+    } on DioException catch (e) {
+      return Left(AppException.fromDioError(e));
+    } catch (error) {
+      return Left(AppException(error.toString()));
+    }
+  }
 }

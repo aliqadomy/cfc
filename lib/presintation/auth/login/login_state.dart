@@ -4,12 +4,31 @@ abstract class LoginState {}
 
 class LoginInitial extends LoginState {}
 
-class LoginSuccess extends LoginState{
-  ResponseUser responseUser;
-  LoginSuccess({required this.responseUser});
+class LoginLoading extends LoginState {}
+class NewTokenLoading extends LoginState {}
+
+abstract class LoginSuccessBase extends LoginState {
+  final ResponseUser responseUser;
+  LoginSuccessBase({required this.responseUser});
 }
-class LoginFailed extends LoginState{
-  String msgErr;
-  LoginFailed({required this.msgErr});
+
+class LoginSuccess extends LoginSuccessBase {
+  LoginSuccess({required super.responseUser});
 }
-class LoginLoading extends LoginState{}
+
+class NewTokenSuccess extends LoginSuccessBase {
+  NewTokenSuccess({required super.responseUser});
+}
+
+abstract class LoginFailedBase extends LoginState {
+  final String msgErr;
+  LoginFailedBase({required this.msgErr});
+}
+
+class LoginFailed extends LoginFailedBase {
+  LoginFailed({required super.msgErr});
+}
+
+class NewTokenFailed extends LoginFailedBase {
+  NewTokenFailed({required super.msgErr});
+}

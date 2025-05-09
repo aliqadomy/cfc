@@ -6,7 +6,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   // Initialize local notifications with callback support

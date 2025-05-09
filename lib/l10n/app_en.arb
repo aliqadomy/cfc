@@ -73,7 +73,7 @@
   "welcomes": "Authorized by the Capital Market Authority",
   "onBoarding": "through innovative and distinguished technical\n financial solutions for investment and financing",
   "invest": "Investment opportunities",
-  "investBtn": "invest",
+  "investBtn": "Invest",
   "withdraw": "Withdraw",
   "maximum": "The maximum withdrawal limit is",
   "contactus":"Contact US",
@@ -113,6 +113,25 @@
   "quest": "Questionnaire",
   "applyNow":"Your account is inactive as an investor. Apply now.",
   "checkData": "Check Data",
+  "submit": "Submit",
   "gender": "Gender",
-  "wkaleh": "Investment Agency Agreement"
+  "wkaleh": "Investment Agency Agreement",
+  "emailRegex": "Enter a valid email address",
+  "biometric" : "Please log in using your email and password. To enable biometric authentication, go to your profile settings after logging in.",
+  "biometricUnavailable": "Biometric Login Unavailable",
+  "back": "Back",
+  "continues": "Continue",
+  "logRequired":"Login Required",
+  "logRequiredDesc": "Please log in with your username and password.",
+  "ok": "OK",
+  "enterEmail": "Enter Your Email",
+  "otpFailed": "Failed to Send Otp Check Email Or Mobile Number"
+,  "vOtp": "Verify OTP",
+  "checkNumerOtp": "Enter the 4-digit code sent to your email / phone number.",
+  "fPass": "Forget Password",
+  "otpNumberCheck": "Please enter all 4 digits"
+
+
+
+
 }

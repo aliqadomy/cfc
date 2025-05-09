@@ -6,4 +6,12 @@ class LoginEvents extends LoginEvent{
   String  password;
 
   LoginEvents({required this.email,required this.password});
+
 }
+
+class LoginRefreshToken extends LoginEvent{
+  String rememberToken;
+  LoginRefreshToken({required this.rememberToken});
+}
+
+

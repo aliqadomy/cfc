@@ -21,9 +21,8 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool loading=false;
-  String? storedEmail;
-  String? storedPassword;
+  bool loading = false;
+  String? rememberToken;
   bool _isSwitched = false;
 
   @override
@@ -32,6 +31,7 @@ class _SettingsState extends State<Settings> {
     _loadSwitchState();
     super.initState();
   }
+
   _loadSwitchState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -48,57 +48,66 @@ class _SettingsState extends State<Settings> {
   _loadCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      storedEmail = prefs.getString('username');
-      storedPassword = prefs.getString('password');
+      rememberToken = prefs.getString('remeberToken');
+
     });
   }
 
   // Clear saved credentials from SharedPreferences
   _clearCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('username');
-    await prefs.remove('password');
-    setState(() {
-      storedEmail = null;
-      storedPassword = null;
-    });
+await prefs.remove('remeberToken');
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: CustomAppBar(),
       backgroundColor: AppColors.background2,
       body: Column(
         children: [
-          const  SizedBox(height: 50,),
-          SettingFileds(title:AppLocalizations.of(context)!.changePassword,
-            icon: const Icon(Icons.password),  mainButton: IconButton(
-              onPressed: (){
+          const SizedBox(
+            height: 50,
+          ),
+          SettingFileds(
+            title: AppLocalizations.of(context)!.changePassword,
+            icon: const Icon(Icons.password),
+            mainButton: IconButton(
+              onPressed: () {
                 Navigator.pushNamed(context, ChangePassword.routename);
               },
               icon: const Icon(Icons.arrow_forward_ios),
             ),
           ),
-          SettingFileds(title: AppLocalizations.of(context)!.faceid, icon:const Icon(Icons.remove_red_eye) , mainButton:  Switch(
-            value: _isSwitched,
-            onChanged: (bool value) {
-              setState(() {
-                _isSwitched = value;
-                _saveSwitchState(value);
+          SettingFileds(
+            title: AppLocalizations.of(context)!.faceid,
+            icon: const Icon(Icons.remove_red_eye),
+            mainButton: Switch(
+              value: _isSwitched,
+              onChanged: (bool value) {
+                setState(() {
+                  _isSwitched = value;
+                  _saveSwitchState(value);
 
-                // If true, show dialog to return to login
-                if (_isSwitched) {
-                  _showLoginDialog();
-                } else {
-                  _clearCredentials();
-                }
-              });
-            },
-          ),),
-          SettingFileds(title: AppLocalizations.of(context)!.notifications, icon:const Icon(Icons.notifications_active),
-            mainButton:IconButton(onPressed: ()async{
-      Navigator.of(context).pushNamed(NotificationScreen.routename);
-          }, icon: const Icon(Icons.arrow_forward_ios)),),
+                  // If true, show dialog to return to login
+                  if (_isSwitched) {
+                    _showLoginDialog();
+                  } else {
+                    _clearCredentials();
+                  }
+                });
+              },
+            ),
+          ),
+          SettingFileds(
+            title: AppLocalizations.of(context)!.notifications,
+            icon: const Icon(Icons.notifications_active),
+            mainButton: IconButton(
+                onPressed: () async {
+                  Navigator.of(context).pushNamed(NotificationScreen.routename);
+                },
+                icon: const Icon(Icons.arrow_forward_ios)),
+          ),
           SettingFileds(
             title: AppLocalizations.of(context)!.contactus,
             icon: const Icon(Icons.call),
@@ -106,8 +115,9 @@ class _SettingsState extends State<Settings> {
               onPressed: () async {
                 // Show dialog using showDialog function
                 showDialog(
-                  context: context,  // Ensure that context is passed here
-                  barrierDismissible: true,  // Allow dismissal of dialog on tap outside
+                  context: context, // Ensure that context is passed here
+                  barrierDismissible:
+                      true, // Allow dismissal of dialog on tap outside
                   builder: (BuildContext context) {
                     return Dialog(
                       shape: const RoundedRectangleBorder(
@@ -118,16 +128,27 @@ class _SettingsState extends State<Settings> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(AppLocalizations.of(context)!.contactus,style: const TextStyle(fontFamily: "almarai",fontSize: 17,color: AppColors.green),),
-                            const SizedBox(height: 10,),
+                            Text(
+                              AppLocalizations.of(context)!.contactus,
+                              style: const TextStyle(
+                                  fontFamily: "almarai",
+                                  fontSize: 17,
+                                  color: AppColors.green),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Padding(
-                              padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
+                              padding: const EdgeInsetsDirectional.only(
+                                  start: 16, end: 16),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Row(
                                     children: [
-                                      const Icon(Icons.call, color: AppColors.green),
+                                      const Icon(Icons.call,
+                                          color: AppColors.green),
                                       const SizedBox(width: 10),
                                       InkWell(
                                         onTap: () async {
@@ -140,7 +161,8 @@ class _SettingsState extends State<Settings> {
                                   const SizedBox(height: 6),
                                   Row(
                                     children: [
-                                      const Icon(Icons.mail, color: AppColors.green),
+                                      const Icon(Icons.mail,
+                                          color: AppColors.green),
                                       const SizedBox(width: 10),
                                       InkWell(
                                         onTap: () async {
@@ -158,7 +180,8 @@ class _SettingsState extends State<Settings> {
                               padding: const EdgeInsets.all(8.0),
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.of(context).pop(); // Close the dialog
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
                                 },
                                 child: Text(
                                   AppLocalizations.of(context)!.cancel,
@@ -175,65 +198,62 @@ class _SettingsState extends State<Settings> {
               icon: const Icon(Icons.arrow_forward_ios),
             ),
           ),
-          SettingFileds(title: AppLocalizations.of(context)!.lang,
-            mainButton:   DropdownButton<Language>(
+          SettingFileds(
+            title: AppLocalizations.of(context)!.lang,
+            mainButton: DropdownButton<Language>(
               onChanged: (Language? language) async {
                 if (language != null) {
                   Locale _locale = await setLocale(language.languageCode);
                   MyApp.setLocale(context, _locale);
                   // BlocProvider.of<LanguageBloc>(context).add(LanguageEvents());
-                  setState(() {
-                  });
+                  setState(() {});
                 }
               },
               items: Language.languageList()
                   .map<DropdownMenuItem<Language>>(
-
                     (e) => DropdownMenuItem<Language>(
-                  value: e,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Text(
-                        e.flag,
-                        style: const TextStyle(fontSize: 12),
+                      value: e,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Text(
+                            e.flag,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          Text(e.name)
+                        ],
                       ),
-                      Text(e.name)
-                    ],
-                  ),
-                ),
-              ).toList(),
-            ),),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
           Padding(
-            padding: const EdgeInsets.only(left: 24,right: 24,bottom: 16),
+            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
             child: Container(
-                padding: const EdgeInsets.only(left: 10,right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 width: MediaQuery.of(context).size.width,
                 height: 40,
-                child:CustomButton(
-                    onTap: ()async {
-                      final prefs=await SharedPreferences.getInstance();
-                      storedEmail = prefs.getString("email");
-                     storedPassword = prefs.getString("password");
-                      await prefs.clear();
+                child: CustomButton(
+                    onTap: () async {
 
-                      if (storedEmail != null && storedPassword !=null) {
-                        await prefs.setString("email", storedEmail!);
-                        await prefs.setString("password", storedPassword!);
-                      }
                       setState(() {
                         loading = true;
                       });
                       Future.delayed(const Duration(seconds: 1));
-                      Navigator.pushNamedAndRemoveUntil(context,LoginScreen.routename, (Route<dynamic> route) => false);
-                    }, colors: AppColors.green, title:AppLocalizations.of(context)!.logout)
-            ),
+                      Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          LoginScreen.routename,
+                          (Route<dynamic> route) => false);
+                    },
+                    colors: AppColors.green,
+                    title: AppLocalizations.of(context)!.logout)),
           ),
-
         ],
       ),
     );
   }
+
   Future<void> _launchWhatsApp(String phoneNumber) async {
     final url = 'https://wa.me/$phoneNumber'; // WhatsApp URL format
 
@@ -243,6 +263,7 @@ class _SettingsState extends State<Settings> {
       throw 'Could not open WhatsApp';
     }
   }
+
   Future<void> _launchEmail(String emailAddress) async {
     final url = 'mailto:$emailAddress'; // Email URL scheme
 
@@ -252,20 +273,21 @@ class _SettingsState extends State<Settings> {
       throw 'Could not open email client';
     }
   }
+
   _showLoginDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Login Required"),
-          content: const Text("Please log in with your username and password."),
+          title:  Text(AppLocalizations.of(context)!.logRequired),
+          content:  Text(AppLocalizations.of(context)!.logRequiredDesc),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 _navigateToLogin(); // Navigate to the login page
               },
-              child: const Text("OK"),
+              child:  Text(AppLocalizations.of(context)!.ok),
             ),
           ],
         );
@@ -276,7 +298,7 @@ class _SettingsState extends State<Settings> {
   // Navigate to the login screen
   _navigateToLogin() {
     // Here you can navigate to the login page if needed
-    Navigator.pushNamedAndRemoveUntil(context,LoginScreen.routename, (Route<dynamic> route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        context, LoginScreen.routename, (Route<dynamic> route) => false);
   }
-
 }

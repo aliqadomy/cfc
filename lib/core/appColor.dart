@@ -34,7 +34,7 @@ class ShowToastWidget{
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
+      gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 3,
       backgroundColor: AppColors.green,
       textColor: AppColors.white,
@@ -85,7 +85,6 @@ class LanguageManager {
 class DioHelper{
   static Dio? _dio;
   static init() {
-
     _dio = Dio(
       BaseOptions(
           baseUrl: Urls.BASE_URL,

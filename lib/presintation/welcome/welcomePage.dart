@@ -73,7 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ).toList(),
               ),),
             const SizedBox(height: 70,),
-            CustomButton(1, AppColors.green, AppLocalizations.of(context)!.welcome, AppColors.white,
+            CustomButton( AppColors.green, AppLocalizations.of(context)!.welcome, AppColors.white,
                     ()async{
               Navigator.pushNamed(context, OnBoardingScreen.routename);
             },22,FontWeight.bold),

@@ -1,11 +1,15 @@
 
 import 'package:cfc_main/domain/model/wallet/finicialStatmentModel.dart';
+import 'package:cfc_main/infrastructure/data_soruce/auth/otpProvider.dart';
 import 'package:cfc_main/infrastructure/data_soruce/my_wallet/myWalletProvider.dart';
 import 'package:cfc_main/infrastructure/data_soruce/opportuinity/OpportunityDataProvider.dart';
 import 'package:cfc_main/infrastructure/data_soruce/visitor/visitorProvider.dart';
 import 'package:cfc_main/infrastructure/repository/my_wallet_repo/my_wallet_repo.dart';
 import 'package:cfc_main/infrastructure/repository/opportunityRepo/opportunityRepo.dart';
+import 'package:cfc_main/infrastructure/repository/otpRepo.dart';
 import 'package:cfc_main/infrastructure/repository/visitorRepo.dart';
+import 'package:cfc_main/presintation/auth/change_password_otp/change_password_otp_bloc.dart';
+import 'package:cfc_main/presintation/auth/verfiy_otp/verfiy_otp_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,12 +24,14 @@ import '../infrastructure/repository/loginRepo.dart';
 import '../infrastructure/repository/registerRepo.dart';
 import '../presintation/auth/change_password/change_password.dart';
 import '../presintation/auth/change_password/change_password_bloc.dart';
+import '../presintation/auth/change_password_otp/changePasswordOtp.dart';
 import '../presintation/auth/login/login_bloc.dart';
 import '../presintation/auth/login/screen/login.dart';
 import '../presintation/auth/regestration/regestrationBorrowerScreen.dart';
 import '../presintation/auth/regestration/regestrationInvestorScreen.dart';
 import '../presintation/auth/regestration/regestration_bloc.dart';
 import '../presintation/auth/splashScreen/splashScreen.dart';
+import '../presintation/auth/verfiy_otp/verfiy_otp.dart';
 import '../presintation/home/MyOpportunities/WebViewPage.dart';
 import '../presintation/home/MyOpportunities/opportunityDetails/campgainAttachmentBloc/attachment_bloc.dart';
 import '../presintation/home/MyOpportunities/opportunityDetails/investBloc/invest_bloc.dart';
@@ -65,14 +71,41 @@ class AppRouter {
             settings: const RouteSettings(name: OnBoardingScreen.routename));
       case LoginScreen.routename:
         return PageTransition(
-            child: BlocProvider<LoginBloc>(
-              create: (context) => LoginBloc(
-                  loginRepo: LoginRepo(
-                      loginAuthProvider: LoginAuthProvider(dio: Dio()))),
-              child: const LoginScreen(),
+            child: MultiBlocProvider(
+              providers: [
+
+                BlocProvider<LoginBloc>(
+                  create: (context) => LoginBloc(
+                      loginRepo: LoginRepo(
+                          loginAuthProvider: LoginAuthProvider(dio: Dio()))),
+                  child: const LoginScreen(),
+                ),
+                BlocProvider<VerfiyOtpBloc>(
+                  create: (context) => VerfiyOtpBloc(sendOtpRepo: SendOtpRepo(otpProvider: OtpProvider()))
+                    ),
+
+              ], child: const LoginScreen(),
             ),
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: LoginScreen.routename));
+
+      case VerfiyOtp.routename:
+        return PageTransition(
+            child:  BlocProvider(
+  create: (context) => VerfiyOtpBloc(sendOtpRepo: SendOtpRepo(otpProvider: OtpProvider())),
+  child: const VerfiyOtp(),
+),
+            type: PageTransitionType.fade,
+            settings: const RouteSettings(name: VerfiyOtp.routename));
+
+      case ChangePasswordOtp.routename:
+        return PageTransition(
+            child:  BlocProvider(
+  create: (context) => ChangePasswordOtpBloc(resetPassRepo: ResetPassRepo(resetAuth: ResetAuth(dio: Dio()))),
+  child: const ChangePasswordOtp(),
+),
+            type: PageTransitionType.fade,
+            settings: const RouteSettings(name: ChangePasswordOtp.routename));
 
       case RegestrationBorrowerscreen.routename:
         return PageTransition(

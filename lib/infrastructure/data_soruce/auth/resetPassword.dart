@@ -14,4 +14,14 @@ class ResetAuth{
     }
     );
   }
+
+  Future<dynamic> changePasswordOtp(String email ,String oldPass,String newPass)async{
+    return await DioHelper.postData(
+        url:'https://api.cfc.sa/api/updatePasswordOtpNew',query: {
+          'email':email,
+      'password':oldPass,
+      'confirm_password':newPass
+    }
+    );
+  }
 }

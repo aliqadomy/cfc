@@ -7,7 +7,6 @@ class LoginAuthProvider{
   final Dio dio;
 
   Future<dynamic> login(String email ,String password)async{
-
   return await DioHelper.postData(url:'https://api.cfc.sa/api/login',data: {
     'email':email,
     'password':password
@@ -15,7 +14,12 @@ class LoginAuthProvider{
   }
 
   Future<dynamic> me()async{
-
     return await DioHelper.postData(url:'https://api.cfc.sa/api/me');
+  }
+
+  Future<dynamic> refreshTokenApi(String rememberToken)async{
+    return await DioHelper.postData(url:'https://api.cfc.sa/api/rememberToken',data: {
+      'remember_token':rememberToken,
+    });
   }
 }

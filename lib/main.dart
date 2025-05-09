@@ -16,8 +16,8 @@ import 'core/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DioHelper.init();
   await Firebase.initializeApp();
+  await DioHelper.init();
   NotificationService notificationService = NotificationService();
   notificationService.requestNotificationPermission();
   notificationService.firebaseInit();
@@ -51,6 +51,7 @@ class MyApp extends StatefulWidget {
   }
 }
 
+
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
 
@@ -58,7 +59,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getFcmToken();
-    // Load saved locale on app start
     _loadLocale();
   }
 
@@ -68,36 +68,30 @@ class _MyAppState extends State<MyApp> {
 
     if (token != null) {
       print("FCM Token: $token");
-      // Store or send token to your backend
     } else {
       print("Failed to get FCM token");
     }
   }
 
-  // Load locale from SharedPreferences
   Future<void> _loadLocale() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? languageCode = prefs.getString('languageCode');
-
-    // If no language is saved, use device's default locale
     if (languageCode != null) {
       setState(() {
         _locale = Locale(languageCode);
       });
     } else {
       setState(() {
-        _locale = Locale('en'); // Default to English if no saved locale
+        _locale = Locale('en');
       });
     }
   }
 
-  // Save the selected language to SharedPreferences
   setLocale(Locale locale) async {
     setState(() {
       _locale = locale;
     });
 
-    // Save the language to SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('languageCode', locale.languageCode);
 

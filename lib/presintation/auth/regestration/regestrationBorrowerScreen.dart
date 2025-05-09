@@ -222,7 +222,7 @@ class _RegestrationBorrowerscreenState extends State<RegestrationBorrowerscreen>
 
                              ],),
                                 const SizedBox(height: 10),
-                                CustomButton(0.6, AppColors.green, AppLocalizations.of(context)!.reg,
+                                CustomButton(AppColors.green, AppLocalizations.of(context)!.reg,
                                     AppColors.white, () {
                                   if(_formKey.currentState!.validate())
                                     {

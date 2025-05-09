@@ -7,6 +7,7 @@ import '../../../core/appColor.dart';
 import '../../commonWidget/button.dart';
 import '../../commonWidget/customTextInput.dart';
 import '../../home/mainHome/mainHome.dart';
+import 'countryCode.dart';
 
 class RegestationInvestorScreen extends StatefulWidget {
   RegestationInvestorScreen({Key? key}) : super(key: key);
@@ -51,6 +52,8 @@ class _RegestationInvestorScreenState extends State<RegestationInvestorScreen> {
   int type=1;
 
   SingingCharacter? _character = SingingCharacter.individual;
+
+  String selectedCountryCode = '+966';
 
   @override
   Widget build(BuildContext context) {
@@ -174,24 +177,36 @@ class _RegestationInvestorScreenState extends State<RegestationInvestorScreen> {
                                     const SizedBox(
                                       height: 35,
                                     ),
-                                    Customtextinput(
-                                      hintText: AppLocalizations.of(context)!.mobNum,
-                                      controller: mobileNumber,
-                                      secure: false,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter your mobile number';
-                                        }
-                                        if (!value.startsWith('05')) {
-                                          return 'Mobile number must start with 05********';
-                                        }
-                                        if (value.length != 10) {
-                                          return 'Mobile number must be 10 digits long';
-                                        }
-                                        return null; // Return null if validation passes
-                                      },
-                                      icon: const Icon(Icons.phone),
+                                    Row(
+                                      children: [
+                                        CountryCodeDropdown(
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              selectedCountryCode = newValue;
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Customtextinput(
+                                            hintText: AppLocalizations.of(context)!.mobNum,
+                                            controller: mobileNumber,
+                                            secure: false,
+                                            validator: (value) {
+                                              if (value == null || value.isEmpty) {
+                                                return 'Please enter your mobile number';
+                                              }
+                                              if (value.length != 10) {
+                                                return 'Mobile number must be 10 digits long';
+                                              }
+                                              return null;
+                                            },
+                                            icon: const Icon(Icons.phone),
+                                          ),
+                                        ),
+                                      ],
                                     ),
+
                                     const SizedBox(
                                       height: 35,
                                     ),
@@ -340,7 +355,7 @@ class _RegestationInvestorScreenState extends State<RegestationInvestorScreen> {
                                       ),
                                     const SizedBox(height: 30),
                                     CustomButton(
-                                        0.6,
+
                                         AppColors.green,
                                         AppLocalizations.of(context)!.reg,
                                         AppColors.white,

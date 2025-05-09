@@ -54,7 +54,6 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
   TextEditingController familyNumberController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController educationGradeController = TextEditingController();
-  TextEditingController regionController = TextEditingController();
   TextEditingController jobStatusController = TextEditingController();
   TextEditingController nationalityLocationController = TextEditingController();
   TextEditingController dateController = TextEditingController();
@@ -76,22 +75,18 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
 
   Future<void> saveData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // Saving TextEditingController values to SharedPreferences
     prefs.setString('email', emailController.text);
     prefs.setString('mobile', mobileController.text);
     prefs.setString('martialStatus', _selectedMaritalStatus!);
     prefs.setString('familyNumber', familyNumberController.text);
     prefs.setString('gender', _genderStatus!);
     prefs.setString('educationGrade', _educationStatus!);
-    prefs.setString('region', regionController.text);
+    prefs.setString('region', _selectedRegion!);
     prefs.setString('jobStatus', _jobStatus!);
     prefs.setString('nationalityLocation', nationalityLocationController.text);
     prefs.setString('date', dateController.text);
     prefs.setString('idNumber', idNumberController.text);
     prefs.setString('iban', ibanController.text);
-
-    // Saving boolean values
     prefs.setBool('selectedAnswerIncome', selectedAnswerIncome ?? true);
     prefs.setBool('selectedAnswerOne', selectedAnswerOne ?? true);
     prefs.setBool('selectedAnswerTwo', selectedAnswerTwo ?? true);
@@ -117,7 +112,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
     familyNumberController.text = prefs.getString('familyNumber') ?? '';
     _genderStatus = prefs.getString('gender') ?? '';
     _educationStatus = prefs.getString('educationGrade');
-    regionController.text = prefs.getString('region') ?? '';
+    _selectedRegion = prefs.getString('region') ?? '';
     _jobStatus = prefs.getString('jobStatus') ?? '';
     nationalityLocationController.text =
         prefs.getString('nationalityLocation') ?? '';
@@ -125,8 +120,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
     idNumberController.text = prefs.getString('idNumber') ?? '';
     ibanController.text = prefs.getString('iban') ?? '';
     icomeController.text = prefs.getString('income') ?? '';
-    print(
-        "sssssssss$_genderStatus $_jobStatus $_selectedMaritalStatus $_educationStatus");
+
     _jobStatusIndex = _jobStatus as int?;
     _educationStatusInt = _educationStatus as int?;
     _genderStatusIndex = _genderStatus as int?;
@@ -158,6 +152,22 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
     'مطلق',
     'ارمبل'
   ];
+  final List<String> _dropdownRegions = [
+    'الرياض',
+    'المنطقة الشرقية',
+    'مكة المكرمة',
+    'المدينة المنورة',
+    'القصيم',
+    'عسير',
+    'تبوك',
+    'حائل',
+    'الحدود الشمالية',
+    'جازان',
+    'نجران',
+    'الباحة',
+    'الجوف',
+  ];
+
 
   final List<String> _dropdownIndividualIdentityType = [
     'سعودي',
@@ -185,6 +195,9 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
 
   int? _selectedMaritalStatusIndex;
   String? _selectedMaritalStatus;
+
+  int? _selectedRegionIndex;
+  String? _selectedRegion;
 
   int? _educationStatusInt;
   String? _educationStatus;
@@ -469,20 +482,22 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                           }
                                         },
                                         child: Container(
-                                          width: 70,
-                                          height: 50,
+                                          padding: const EdgeInsets.only(top: 12,bottom: 12,left: 7,right: 7),
                                           alignment: Alignment.center,
                                           decoration: const BoxDecoration(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(16)),
                                             color: AppColors.green,
                                           ),
-                                          child: const Text(
-                                            'Back',
-                                            style: TextStyle(
-                                                color: AppColors.white,
-                                                fontFamily: 'almarai',
-                                                fontWeight: FontWeight.bold),
+                                          child:   FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text(
+                                              AppLocalizations.of(context)!.back,
+                                              style: TextStyle(
+                                                  color: AppColors.white,
+                                                  fontFamily: 'almarai',
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -527,8 +542,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                               }
                                             },
                                             child: Container(
-                                                width: 70,
-                                                height: 50,
+                                              padding: const EdgeInsets.only(top: 12,bottom: 12,left: 7,right: 7),
                                                 alignment: Alignment.center,
                                                 decoration: const BoxDecoration(
                                                   borderRadius:
@@ -536,9 +550,9 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                           Radius.circular(16)),
                                                   color: AppColors.green,
                                                 ),
-                                                child: const Text(
-                                                  'Continue',
-                                                  style: TextStyle(
+                                                child:   Text(
+                                                  AppLocalizations.of(context)!.continues,
+                                                  style: const TextStyle(
                                                       color: AppColors.white,
                                                       fontFamily: 'almarai',
                                                       fontWeight:
@@ -563,7 +577,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                               .text,
                                                       gender: _genderStatus!,
                                                       region:
-                                                          regionController.text,
+                                                          _selectedRegion!,
                                                       jobStatus: _jobStatus!,
                                                       nationalityLocation:
                                                           nationalityLocationController
@@ -602,8 +616,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                               saveData(); // Call the save function when the button is pressed
                                             },
                                             child: Container(
-                                              width: 70,
-                                              height: 50,
+                                              padding: const EdgeInsets.only(top: 12,bottom: 12,left: 7,right:7),
                                               alignment: Alignment.center,
                                               decoration: const BoxDecoration(
                                                 borderRadius: BorderRadius.all(
@@ -759,15 +772,17 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                           (String value) {
                                                         return DropdownMenuItem<String>(
                                                           value: value,
-                                                          child: Text(value),
+                                                          child: Text(
+                                                            value,
+                                                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2),
+                                                            style: const TextStyle(fontSize: 16),
+                                                          )
                                                         );
                                                       },
                                                     ).toList(),
                                                   ),
                                                 ],
                                               ),
-
-
                                               SizedBox(
                                                 height: 100,
                                                 child: Column(
@@ -808,7 +823,11 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                             (String value) {
                                                           return DropdownMenuItem<String>(
                                                             value: value,
-                                                            child: Text(value),
+                                                            child: Text(
+                                                              value,
+                                                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2),
+                                                              style: const TextStyle(fontSize: 16),
+                                                            )
                                                           );
                                                         },
                                                       ).toList(),
@@ -855,7 +874,11 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                             (String value) {
                                                           return DropdownMenuItem<String>(
                                                             value: value,
-                                                            child: Text(value),
+                                                            child: Text(
+                                                              value,
+                                                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2),
+                                                              style: const TextStyle(fontSize: 16),
+                                                            )
                                                           );
                                                         },
                                                       ).toList(),
@@ -863,7 +886,6 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                   ],
                                                 ),
                                               ),
-
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -904,7 +926,62 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                           (String value) {
                                                         return DropdownMenuItem<String>(
                                                           value: value,
-                                                          child: Text(value),
+                                                          child: Text(
+                                                            value,
+                                                            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2),
+                                                            style: const TextStyle(fontSize: 16),
+                                                          )
+                                                        );
+                                                      },
+                                                    ).toList(),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    AppLocalizations.of(context)!.region,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  DropdownButtonFormField<String>(
+                                                    value: _selectedRegionIndex == null
+                                                        ? null
+                                                        : _dropdownRegions[_selectedRegionIndex!],
+                                                    isExpanded: true,
+                                                    hint: Text(
+                                                      _selectedRegion == null || _selectedRegion!.isEmpty
+                                                          ? "Select Region" // Default hint when no selection
+                                                          : _dropdownRegions[
+                                                      int.tryParse(_selectedRegion!) ?? 0], // Safe parsing
+                                                    ),
+                                                    onChanged: (String? newValue) {
+                                                      setState(() {
+                                                        // Store the index of the selected marital status
+                                                        _selectedRegionIndex =
+                                                            _dropdownRegions.indexOf(newValue!);
+                                                        // Store the index as a string in _selectedMaritalStatus
+                                                        _selectedRegion =
+                                                            _selectedRegionIndex.toString();
+                                                      });
+                                                    },
+                                                    validator: (value) {
+                                                      if (value == null || value.isEmpty) {
+                                                        return 'Please select an option';
+                                                      }
+                                                      return null;
+                                                    },
+                                                    items: _dropdownRegions.map<DropdownMenuItem<String>>(
+                                                          (String value) {
+                                                        return DropdownMenuItem<String>(
+                                                            value: value,
+                                                            child: Text(
+                                                              value,
+                                                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2),
+                                                              style: const TextStyle(fontSize: 16),
+                                                            )
                                                         );
                                                       },
                                                     ).toList(),
@@ -962,29 +1039,9 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                   ],
                                                 ),
                                               ),
-                                              SizedBox(
-                                                height: 110,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(AppLocalizations.of(context)!.region),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Customtextinput(
-                                                      hintText: 'Region',
-                                                      controller: regionController, // Ensure this controller is initialized
-                                                      secure: false,
-                                                      validator: (value) {
-                                                        if (value == null || value.isEmpty) {
-                                                          return 'This field is required'; // Fix "Filed" to "Field"
-                                                        }
-                                                        return null;
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+
+
+
 
                                             ],
                                             )),
@@ -1044,7 +1101,11 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                                 String>(
                                                               value: value,
                                                               child:
-                                                                  Text(value),
+                                                              Text(
+                                                                value,
+                                                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2),
+                                                                style: const TextStyle(fontSize: 16),
+                                                              )
                                                             );
                                                           }).toList(),
                                                         ),

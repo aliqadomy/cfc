@@ -29,16 +29,16 @@ class OnBoardingScreen extends StatelessWidget {
             SvgPicture.asset('assets/images/image 406-2.svg'),
              SizedBox(height: MediaQuery.of(context).size.height*0.13),
              Column(children: [
-            CustomButton(0.65, AppColors.softWhite, AppLocalizations.of(context)!.login, AppColors.blue, (){
+            CustomButton( AppColors.softWhite, AppLocalizations.of(context)!.login, AppColors.blue, (){
                 Navigator.pushNamed(context,LoginScreen.routename);
               },18,FontWeight.bold),
 
                const SizedBox(height: 20,),
-              CustomButton(0.65, AppColors.blue, AppLocalizations.of(context)!.invReg , AppColors.white, (){
+              CustomButton( AppColors.blue, AppLocalizations.of(context)!.invReg , AppColors.white, (){
                 Navigator.pushNamed(context,RegestationInvestorScreen.routename);
               },18,FontWeight.bold),
                const SizedBox(height: 20,),
-              CustomButton(0.65, AppColors.green,  AppLocalizations.of(context)!.vistor, AppColors.white, (){
+              CustomButton(AppColors.green,  AppLocalizations.of(context)!.vistor, AppColors.white, (){
                 Navigator.pushNamed(context,Visitorscreen.routename);
               },18,FontWeight.bold)
 
