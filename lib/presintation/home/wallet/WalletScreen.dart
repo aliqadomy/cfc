@@ -1,6 +1,7 @@
 import 'package:cfc_main/core/appColor.dart';
 import 'package:cfc_main/infrastructure/data_soruce/my_wallet/myWalletProvider.dart';
 import 'package:cfc_main/infrastructure/repository/my_wallet_repo/my_wallet_repo.dart';
+import 'package:cfc_main/presintation/home/wallet/payone/pay_one_bloc.dart';
 import 'package:cfc_main/presintation/home/wallet/withdraw_bloc/withdraw_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +27,7 @@ class Walletscreen extends StatefulWidget {
 class _WalletscreenState extends State<Walletscreen> {
   late WalletResponseModel walletResponse;
   TextEditingController balanceText = TextEditingController();
+  TextEditingController amountAdded = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   UserKycModel? userKyc;
   bool showData = false;
@@ -221,10 +223,11 @@ class _WalletscreenState extends State<Walletscreen> {
                                                         MediaQuery.of(context)
                                                             .size
                                                             .width,
-                                                    child: Text(
+                                                    child: const Text(
                                                         "No Wallet Available"))
                                                 : Container(
-                                                    padding: EdgeInsets.all(8),
+                                                    padding:
+                                                        const EdgeInsets.all(8),
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
@@ -333,9 +336,15 @@ class _WalletscreenState extends State<Walletscreen> {
                                                                         }
                                                                         return null;
                                                                       },
-                                                                      icon: const Icon(
-                                                                          Icons
-                                                                              .swap_vert_outlined),
+                                                                      icon: Padding(
+                                                                        padding: const EdgeInsets.all(12.0),
+                                                                        child: Image.asset(
+                                                                          'assets/images/saudi_sign.png',
+                                                                          width: 10,
+                                                                          height: 10,
+                                                                        ),
+                                                                      ),
+                                                                      showPrefixIcon: true,
                                                                     ),
                                                                     CustomButton(
                                                                       colors: AppColors
@@ -395,56 +404,169 @@ class _WalletscreenState extends State<Walletscreen> {
                   ),
                   CustomButton(
                       colors: AppColors.green,
-                      title: AppLocalizations.of(context)?.inWallet,
+                      title: AppLocalizations.of(context)!.depositInWallet,
                       onTap: () {
-                        showDialog(
+                        showModalBottomSheet<void>(
+                          isScrollControlled: true,
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('للأيداع بمحفظتك الاستثمارية'),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        '1- التحويل المباشر من حسابك البنكي لحساب محفظتك الاستثمارية'),
-                                    SizedBox(height: 8),
-                                    Text(
-                                        'بعد اجراء عمليات التحقق من بياناتك كمستثمر(KYC) وتعديل حالة ملفك ل (معتمد) اتبع الخطوات التالية لشحن محفظتك :'),
-                                    SizedBox(height: 8),
-                                    Text(
-                                        '* من خلال (لوحة المعلومات) احصل على الآيبان الخاص بمحفظتك .'),
-                                    Text(
-                                        '* من خلال تطبيق البنك الخاص بحسابك الشخصي يمكنك ايداع المبلغ المراد شحن المحفظة الاستثمارية الخاص بك.'),
-                                    Text(
-                                        'ادخل حساب الآيبان الخاص بمحفظتك الاستثمارية واختر إسم البنك (البنك العربي الوطني) والمبلغ .'),
-                                    Text(
-                                        '* للتأكد من رصيد المحفظة الاستثمارية من خلال منصة التنافسية او تطبيق التنافسية اختر أيقونة (محفظتي )وتعرف على رصيد المحفظة.'),
-                                    SizedBox(height: 16),
-                                    Text(
-                                        '2- التحويل من خلال قنوات الدفع (بطاقات الأئتمان،ApplePay,STC Pay,Sadad):'),
-                                    SizedBox(height: 8),
-                                    Text(
-                                        '* من خلال أيقونة (قنوات الدفع) بصفحة محفظتي يمكنك اختيار طريقة الدفع للإيداع بمحفظتك الاستثمارية.'),
-                                  ],
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              child: BlocProvider(
+                                create: (context) => PayOneBloc(
+                                    myWalletprovider: Mywalletprovider()),
+                                child: StatefulBuilder(
+                                  builder: (innerContext, setState) {
+                                    return Container(
+                                      padding: const EdgeInsets.all(8),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.30,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  "ايداع في المحفظه",
+                                                  style: TextStyle(
+                                                      color: AppColors.blue,
+                                                      fontSize: 20),
+                                                ),
+                                                Form(
+                                                  key: _formKey,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Customtextinput(
+                                                        icon: Padding(
+                                                          padding: const EdgeInsets.all(12.0),
+                                                          child: Image.asset(
+                                                            'assets/images/saudi_sign.png',
+                                                            width: 10,
+                                                            height: 10,
+                                                          ),
+                                                        ),
+                                                        showPrefixIcon: true,
+                                                        hintText:
+                                                            AppLocalizations.of(context)!.depositInWalletHint,
+                                                        controller: amountAdded,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        secure: false,
+                                                        validator: (value){
+                                                          if (double.tryParse(value!) ==
+                                                              null ||
+                                                              double.parse(value) <=
+                                                                 0.0) {
+                                                            return AppLocalizations.of(context)!.withdrawAmountValidate;
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      CustomButton(
+                                                        colors: AppColors.green,
+                                                        title:
+                                                            "${AppLocalizations.of(innerContext)?.submit}",
+                                                        onTap: () async {
+                                                          if (_formKey
+                                                              .currentState!
+                                                              .validate()) {
+                                                            BlocProvider.of<
+                                                                PayOneBloc>(
+                                                                innerContext)
+                                                                .add(AddBalance(
+                                                                amount:
+                                                                amountAdded
+                                                                    .text));
+                                                          }
+
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                  },
-                                  child: Text(AppLocalizations.of(context)!.ok),
-                                ),
-                              ],
                             );
                           },
-                        );
-                      }),
+                        ).then((_) {
+                          amountAdded.clear();
+                      });
+                  }),
                 ],
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
+              TextButton(onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('للأيداع بمحفظتك الاستثمارية'),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    '1- التحويل المباشر من حسابك البنكي لحساب محفظتك الاستثمارية'),
+                                SizedBox(height: 8),
+                                Text(
+                                    'بعد اجراء عمليات التحقق من بياناتك كمستثمر(KYC) وتعديل حالة ملفك ل (معتمد) اتبع الخطوات التالية لشحن محفظتك :'),
+                                SizedBox(height: 8),
+                                Text(
+                                    '* من خلال (لوحة المعلومات) احصل على الآيبان الخاص بمحفظتك .'),
+                                Text(
+                                    '* من خلال تطبيق البنك الخاص بحسابك الشخصي يمكنك ايداع المبلغ المراد شحن المحفظة الاستثمارية الخاص بك.'),
+                                Text(
+                                    'ادخل حساب الآيبان الخاص بمحفظتك الاستثمارية واختر إسم البنك (البنك العربي الوطني) والمبلغ .'),
+                                Text(
+                                    '* للتأكد من رصيد المحفظة الاستثمارية من خلال منصة التنافسية او تطبيق التنافسية اختر أيقونة (محفظتي )وتعرف على رصيد المحفظة.'),
+                                SizedBox(height: 16),
+                                Text(
+                                    '2- التحويل من خلال قنوات الدفع (بطاقات الأئتمان،ApplePay,STC Pay,Sadad):'),
+                                SizedBox(height: 8),
+                                Text(
+                                    '* من خلال أيقونة (قنوات الدفع) بصفحة محفظتي يمكنك اختيار طريقة الدفع للإيداع بمحفظتك الاستثمارية.'),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pop(); // Close the dialog
+                              },
+                              child: Text(AppLocalizations.of(context)!.ok),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+              }, child: Text(AppLocalizations.of(context)!.inWallet,style: const TextStyle(decoration: TextDecoration.underline,fontSize: 14,color: Colors.red),),),
+              const SizedBox(height: 10,),
               BlocBuilder<FinicialStatmentBloc, FinicialStatmentState>(
                 builder: (context, state) {
                   if (state is FinicalStatmentSuccess) {
@@ -603,8 +725,6 @@ class _WalletscreenState extends State<Walletscreen> {
           ),
         ));
   }
-
-
 
   void _logout(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(

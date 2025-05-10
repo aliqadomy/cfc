@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../../core/appColor.dart';
 
 class Mywalletprovider{
@@ -40,5 +42,16 @@ class Mywalletprovider{
     },header: {
     });
   }
+
+  Future<void> addBalance(String amount) async {
+    final Uri url = Uri.parse('https://api.cfc.sa/api/redirect?amount=$amount');
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 
 }

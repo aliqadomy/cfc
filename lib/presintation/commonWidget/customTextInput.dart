@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import '../../core/appColor.dart';
 
 class Customtextinput extends StatefulWidget {
-  Customtextinput({
+  const Customtextinput({
     super.key,
     required this.hintText,
     this.controller,
     required this.secure,
     this.readOnly = false,
-    this.iconPass = const SizedBox(width: 0, height: 0),
-    this.icon = const SizedBox(width: 0, height: 0),
+    this.iconPass,
+    this.icon,
     this.keyboardType = TextInputType.text,
     this.validator,
     this.onPress,
+    this.showPrefixIcon = true,
   });
 
-  final Widget icon;
-  final Widget iconPass;
+  final Widget? icon;
+  final Widget? iconPass;
   final String? hintText;
   final bool secure;
   final bool readOnly;
@@ -24,6 +25,7 @@ class Customtextinput extends StatefulWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final VoidCallback? onPress;
+  final bool showPrefixIcon;
 
   @override
   State<Customtextinput> createState() => _CustomtextinputState();
@@ -32,7 +34,6 @@ class Customtextinput extends StatefulWidget {
 class _CustomtextinputState extends State<Customtextinput> {
   @override
   Widget build(BuildContext context) {
-    // Clamp text scale factor so it doesn't get too large
     final double clampedTextScale = MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2);
 
     return GestureDetector(
@@ -51,7 +52,7 @@ class _CustomtextinputState extends State<Customtextinput> {
             validator: widget.validator,
             style: const TextStyle(fontSize: 16),
             decoration: InputDecoration(
-              prefixIcon: widget.icon,
+              prefixIcon: widget.showPrefixIcon ? widget.icon : null,
               suffixIcon: widget.iconPass,
               suffixIconColor: Colors.black,
               filled: true,

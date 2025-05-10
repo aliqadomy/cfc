@@ -22,7 +22,7 @@ class MyWalletRepo extends MyWalletInterFce
       if (response.data['status'] == false) {
         return Left(AppException(response.data['response'] ?? 'Unknown error occurred'));
       }
-      //response.data['response']
+
       final walletBalance = WalletResponseModel.fromJson(response.data['response']);
       return Right(walletBalance);
 

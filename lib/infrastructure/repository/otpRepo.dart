@@ -19,7 +19,6 @@ class SendOtpRepo extends OtpInterFace {
   Future<Either<dynamic, SendOtpModel>> sendOtpRepFun(String email) async{
     try {
       final response = await otpProvider.sendOtpProFun(email);
-      print("resssss $response");
       if (response.data['status'] == false) {
         return Left(AppException(response.data['response']['message'] ?? 'Unknown error occurred'));
       }
