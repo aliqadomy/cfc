@@ -80,7 +80,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     FlagCard(
-                                      signValue: false,
+                                      signValue: true,
                                       index: 0,
                                       titleOne: state
                                           .investorDashBoardModel.totalProfit
@@ -90,7 +90,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     ),
                                     FlagCard(
                                       signValue: true,
-
                                       index: 1,
                                       titleOne: state.investorDashBoardModel
                                           .totalInvestment
@@ -99,7 +98,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                           .totalAmountsInvested,
                                     ),
                                     FlagCard(
-                                      signValue: true,
+                                      signValue: false,
                                       index: 2,
                                       titleOne: state.investorDashBoardModel
                                           .numberOfInvestment

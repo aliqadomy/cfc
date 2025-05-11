@@ -243,7 +243,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                 children: [
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.22,
+                                        0.20,
                                   ),
                                   BlocBuilder<AllOpportunityBloc,
                                       AllOpportunityState>(
@@ -493,7 +493,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                             fit: BoxFit.scaleDown,
                                             child: Text(
                                               AppLocalizations.of(context)!.back,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: AppColors.white,
                                                   fontFamily: 'almarai',
                                                   fontWeight: FontWeight.bold),

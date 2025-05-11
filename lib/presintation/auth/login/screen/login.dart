@@ -48,7 +48,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final prefs = await SharedPreferences.getInstance();
     expiryString = prefs.getString('refresh_token_expires_at');
     refreshToken = prefs.getString('remeberToken');
-
     if (expiryString == null || refreshToken == null) return false;
 
     final expiryDate = DateTime.tryParse(expiryString!);
@@ -105,18 +104,18 @@ class _LoginScreenState extends State<LoginScreen> {
             showDialog(
               context: context,
               builder: (_) => AlertDialog(
-                title: const Text("Login Failed"),
+                title:  Text(AppLocalizations.of(context)!.authFailed),
                 content: Text(state.msgErr),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text("OK"),
+                    child:  Text(AppLocalizations.of(context)!.ok),
                   ),
                 ],
               ),
             );
           } else {
-            _logoutUser();
+
           }
         }
       },
@@ -253,6 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             var isSwitch = prefs.getBool("isSwitched") ?? false;
                             if (isSwitch) {
                               var status = await checkLoginStatus(context);
+                              print("ssss status $status");
                               if (!status) {
                                 dialog();
                                 return;
@@ -264,6 +264,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 BlocProvider.of<LoginBloc>(context).add(
                                     LoginRefreshToken(
                                         rememberToken: refreshToken!));
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  HomeMain.routename,
+                                      (Route<dynamic> route) => false,
+                                );
+
                               }
                             } else {
                               dialog();

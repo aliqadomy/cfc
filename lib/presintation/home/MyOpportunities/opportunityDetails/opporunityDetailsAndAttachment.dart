@@ -35,13 +35,15 @@ class _OpportunitydetailsAndattachmentState
 
   @override
   void initState() {
-
     BlocProvider.of<AttachmentBloc>(context).add(OpportunityAttachmentsEvent(
         id: widget.allOpportunityModel.id!.toInt()));
     BlocProvider.of<OppourtunityDataDetailsBloc>(context).add(
         OppourtinityDataDetailsEvents(
             id: widget.allOpportunityModel.id!.toInt()));
+    print(widget.allOpportunityModel.closeDate!);
     closeDate = DateTime.parse(widget.allOpportunityModel.closeDate!);
+    print(now);
+    print("zzxzxzxzxz${closeDate!.isBefore(now)}");
     super.initState();
   }
 

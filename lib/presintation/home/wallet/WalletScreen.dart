@@ -488,15 +488,17 @@ class _WalletscreenState extends State<Walletscreen> {
                                                           if (_formKey
                                                               .currentState!
                                                               .validate()) {
+                                                            Navigator.pop(innerContext);
                                                             BlocProvider.of<
                                                                 PayOneBloc>(
                                                                 innerContext)
                                                                 .add(AddBalance(
                                                                 amount:
                                                                 amountAdded
-                                                                    .text));
-                                                          }
+                                                                    .text)
+                                                            );
 
+                                                          }
                                                         },
                                                       ),
                                                     ],
@@ -513,9 +515,12 @@ class _WalletscreenState extends State<Walletscreen> {
                               ),
                             );
                           },
+
                         ).then((_) {
                           amountAdded.clear();
+
                       });
+
                   }),
                 ],
               ),
