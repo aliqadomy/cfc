@@ -170,7 +170,7 @@ class _OpportunitydetailsAndattachmentState
                                                setState(() {
                                                  isLoading = false;
                                                });
-                                               ShowToastWidget.showToast("Success Investment");
+                                               ShowToastWidget.showToast(message: "Success Investment");
                                                Future.delayed(const Duration(seconds: 2),(){
                                                  Navigator.pop(context);
                                                });
@@ -178,8 +178,8 @@ class _OpportunitydetailsAndattachmentState
                                                setState(() {
                                                  isLoading=state.isLoading;
                                                });
-                                               ShowToastWidget.showToast(
-                                                   state.msg!);
+                                               ShowToastWidget.showToast(message: state.msg!
+                                                   );
                                              }
                                            },
                                            child: Padding(

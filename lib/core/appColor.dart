@@ -30,7 +30,7 @@ class AppColors{
   }
 }
 class ShowToastWidget{
-  static showToast(String message){
+  static showToast({required String message}){
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
@@ -53,7 +53,6 @@ class TokenManager{
   static Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    print("ssssssss $token");
     return token;
   }
 }
@@ -103,19 +102,13 @@ class DioHelper{
     );
     _dio!.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        // Get the token
         String? token = await TokenManager.getToken();
-        print("yyyyyyyyyyyyyyyyyyyyyyyyyyyzzzzz $token");
-
-
         if (token != null || token !="") {
-          print("eeeee $token");
           options.headers["Authorization"] = "Bearer $token";
         }
        String languageCode=LanguageManager._languageCode;
         options.headers["Accept-Language"] = languageCode;
 
-        print("yyyyyyyyyyyyyyyyyyyyyyyyyyyzzzzz $token");
         return handler.next(options);
       },
     ));

@@ -52,24 +52,36 @@ class DashboardRepo extends Dashboardinterface
   }
 
   @override
-  Future<Either<dynamic, NearestDateModel>> nearestDate() async{
+  Future<Either<dynamic, NearestDateModel>> nearestDate() async {
     try {
       final response = await mainHomeProvider.nearestDateData();
-      print("pppooooo $response");
-      if (response.data['status'] == false) {
-        return Left(AppException(response.data['response']['message'] ?? 'Unknown error occurred'));
+      print("Response: $response");
+
+      if (response.data != null && response.data['status'] == false) {
+        return Left(AppException(response.data['response']?['message'] ?? 'Unknown error occurred'));
       }
-      final nearestDate = NearestDateModel.fromJson(response.data['response']['message']);
+
+      var message = response.data['response']?['message'];
+      if (message == null) {
+        return Left(AppException('No future date found.'));
+      }
+
+      // Parse the nearest date model from the response message
+      final nearestDate = NearestDateModel.fromJson(message);
       return Right(nearestDate);
 
     } on DioException catch (e) {
-      print("hereee now1111222 ${e.message}");
+      print("DioException: ${e.message}");
 
+      if (e.response != null) {
+        print("Error response: ${e.response?.data}");
+      }
+      print("DioException: ${e.message}");
       return Left(AppException.fromDioError(e));
     } catch (error) {
-      print("hereee nowsss ${error}");
-
+      print("Error: $error");
       return Left(AppException(error.toString()));
     }
   }
+
 }

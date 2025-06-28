@@ -63,16 +63,15 @@ class LoginRepo extends Logininterface {
 
   @override
   Future<Either<dynamic, ResponseUser>> refreshTokenApi(String? rememberToken) async{
+
     try {
-
       final storage=await SharedPreferences.getInstance();
-
       final response = await loginAuthProvider.refreshTokenApi(rememberToken!);
-
+      print(rememberToken);
+      print(response);
       if (response.data['status'] == false) {
-        return Left(AppException(response.data['response']['message'] ?? 'Unknown error occurred'));
+        return Left(AppException(response.data['response'] ?? 'Unknown error occurred'));
       }
-
       final responseUser = ResponseUser.fromJson(response.data['response']);
       await  storage.setString("token",responseUser.token!);
       await  storage.setString("name",responseUser.name??responseUser.username!);

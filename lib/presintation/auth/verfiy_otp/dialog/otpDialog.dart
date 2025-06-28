@@ -43,7 +43,7 @@ class _OtpDialogState extends State<OtpDialog> {
                 otpLoading = false;
               });
               Navigator.pop(context);
-              ShowToastWidget.showToast(AppLocalizations.of(context)!.otpFailed);
+              ShowToastWidget.showToast(message: AppLocalizations.of(context)!.otpFailed);
             } else {
               setState(() {
                 otpLoading = true;

@@ -45,13 +45,13 @@ class _ChangePasswordState extends State<ChangePassword> {
         listener: (context, state) {
           if(state is ChangePasswordSuccess)
             {
-              ShowToastWidget.showToast("Password Changed");
+              ShowToastWidget.showToast(message: "Password Changed");
               Future.delayed(const Duration(seconds: 2));
               Navigator.pushNamedAndRemoveUntil(context,LoginScreen.routename, (Route<dynamic> route) => false);
             }
           else if(state is ChangePasswordFailed)
             {
-              ShowToastWidget.showToast(state.errMsg);
+              ShowToastWidget.showToast(message: state.errMsg);
             }else
               {
                  const CircularProgressIndicator();

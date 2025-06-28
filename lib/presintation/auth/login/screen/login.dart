@@ -62,15 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
     emailController.text = email ?? "";
   }
 
-  void _logoutUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    await prefs.remove('refresh_token');
-    await prefs.remove('refresh_token_expires_at');
-    await prefs.remove('email');
-    await prefs.remove('password');
-  }
-
   bool isValidEmail(String email) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return emailRegex.hasMatch(email);
@@ -80,32 +71,29 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) async {
-        if (state is LoginSuccessBase) {
+        if (state is LoginSuccess) {
           final prefs = await SharedPreferences.getInstance();
-          user = state.responseUser;
+          user = state.user;
           await prefs.setString('token', user.token ?? "");
           await prefs.setString('username', user.username ?? "");
           await prefs.setString('user_id', user.id ?? "");
           await prefs.setString('email', user.email ?? "");
           await prefs.setString(
               'refresh_token_expires_at', user.refresh_token_expires_at ?? "");
-
           setState(() => loading = false);
-
           Navigator.pushNamedAndRemoveUntil(
             context,
             HomeMain.routename,
             (Route<dynamic> route) => false,
           );
-        } else if (state is LoginFailedBase) {
-          setState(() => loading = false);
+        } else if (state is LoginFailure) {
 
-          if (state is LoginFailed) {
+          setState(() => loading = false);
             showDialog(
               context: context,
               builder: (_) => AlertDialog(
                 title:  Text(AppLocalizations.of(context)!.authFailed),
-                content: Text(state.msgErr),
+                content: Text(AppLocalizations.of(context)!.authFailed),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
@@ -114,9 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             );
-          } else {
 
-          }
         }
       },
       child: Scaffold(
@@ -162,9 +148,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           secure: false,
                           validator: (value) {
                             if (value!.isEmpty)
-                              return AppLocalizations.of(context)?.required;
+                              return AppLocalizations.of(context)!.required;
                             if (!isValidEmail(value))
-                              return AppLocalizations.of(context)?.emailRegex;
+                              return AppLocalizations.of(context)!.emailRegex;
                             return null;
                           },
                           icon: const Icon(Icons.person),
@@ -196,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (loginFormKey.currentState!.validate()) {
                               setState(() => loading = true);
                               context.read<LoginBloc>().add(
-                                    LoginEvents(
+                                LoginWithCredentials(
                                       email: emailController.text,
                                       password: passwordController.text,
                                     ),
@@ -209,7 +195,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 30),
                         GestureDetector(
                           onTap: () {
-
                             showDialog(
                               context: context,
                               builder: (_) => BlocProvider.value(
@@ -252,26 +237,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             var isSwitch = prefs.getBool("isSwitched") ?? false;
                             if (isSwitch) {
                               var status = await checkLoginStatus(context);
-                              print("ssss status $status");
                               if (!status) {
+                                print("hereeee 1");
                                 dialog();
                                 return;
                               }
                               final isAuthenticated =
                                   await LocalAuth.authenticate();
-                              if (isAuthenticated) {
-                                setState(() => loading = true);
-                                BlocProvider.of<LoginBloc>(context).add(
-                                    LoginRefreshToken(
-                                        rememberToken: refreshToken!));
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  HomeMain.routename,
-                                      (Route<dynamic> route) => false,
-                                );
 
+                              if (isAuthenticated) {
+                                BlocProvider.of<LoginBloc>(context).add(
+                                    LoginWithRefreshToken(
+                                        refreshToken: refreshToken!));
+                                setState(() => loading = true);
                               }
                             } else {
+                              print("hereeee 2");
                               dialog();
                               return;
                             }

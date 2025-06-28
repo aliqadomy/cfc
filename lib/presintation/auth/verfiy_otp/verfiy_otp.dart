@@ -56,7 +56,7 @@ class _VerfiyOtpState extends State<VerfiyOtp> {
 
         }else if(state is VerifyOtpFailed)
           {
-            ShowToastWidget.showToast(state.msg);
+            ShowToastWidget.showToast(message: state.msg);
             setState(() {
               isLoading=false;
             });

@@ -4,6 +4,6 @@ part of 'pay_one_bloc.dart';
 abstract class PayOneEvent {}
 
 class AddBalance extends PayOneEvent{
-  String amount;
+  int amount;
   AddBalance({required this.amount});
 }

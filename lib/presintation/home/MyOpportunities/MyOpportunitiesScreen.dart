@@ -419,12 +419,12 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                         ? BlocListener<ModefiyKycBloc, ModefiyKycState>(
                             listener: (context, state) {
                               if (state is ModefiyKycSuccess) {
-                                ShowToastWidget.showToast(
-                                    state.modefiyKyc.message!);
+                                ShowToastWidget.showToast(message: state.modefiyKyc.message!
+                                    );
                               } else if (state is ModefiyKycFailed) {
-                                ShowToastWidget.showToast(state.errMsg);
+                                ShowToastWidget.showToast(message: state.errMsg);
                               } else {
-                                ShowToastWidget.showToast('Server Error');
+                                ShowToastWidget.showToast(message: 'Server Error');
                               }
                             },
                             child: Stepper(

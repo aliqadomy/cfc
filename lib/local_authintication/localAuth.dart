@@ -7,22 +7,16 @@ class LocalAuth {
 
   static final LocalAuthentication _auth = LocalAuthentication();
 
-  /// Authenticates the user using biometrics
   static Future<bool> authenticate() async {
     try {
-      // Check if device supports biometric authentication
       final bool canCheckBiometrics = await _auth.canCheckBiometrics;
       final bool isDeviceSupported = await _auth.isDeviceSupported();
 
       if (!canCheckBiometrics || !isDeviceSupported) {
-        print('Biometric authentication is not supported or not enrolled.');
         return false;
       }
 
       final biometrics = await _auth.getAvailableBiometrics();
-      print('Available biometrics: $biometrics');
-
-      // Attempt authentication
       return await _auth.authenticate(
         localizedReason: 'Please authenticate using your device credentials',
         options: const AuthenticationOptions(
@@ -57,7 +51,6 @@ class LocalAuth {
     }
   }
 
-  /// Returns a list of available biometric types
   static Future<List<BiometricType>> getAvailableBiometrics() async {
     try {
       return await _auth.getAvailableBiometrics();

@@ -58,7 +58,7 @@ class _RegestrationBorrowerscreenState extends State<RegestrationBorrowerscreen>
      }
    else if(state is RegestrationBorrowerFailed)
        {
-         ShowToastWidget.showToast(state.errMsg!);
+         ShowToastWidget.showToast(message: state.errMsg!);
        }else
          {
 

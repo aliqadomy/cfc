@@ -45,13 +45,13 @@ class _ChangePasswordOtpState extends State<ChangePasswordOtp> {
         listener: (context, state) {
           if(state is ChangePasswordOtpSuccess)
           {
-            ShowToastWidget.showToast("Password Changed");
+            ShowToastWidget.showToast(message: "Password Changed");
             Future.delayed(const Duration(seconds: 2));
             Navigator.pushNamedAndRemoveUntil(context,LoginScreen.routename, (Route<dynamic> route) => false);
           }
           else if(state is ChangePasswordOtpFailed)
           {
-            ShowToastWidget.showToast(state.msg);
+            ShowToastWidget.showToast(message: state.msg);
             Future.delayed(const Duration(seconds: 2));
             Navigator.pushNamedAndRemoveUntil(context,LoginScreen.routename, (Route<dynamic> route) => false);
 

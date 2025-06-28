@@ -70,7 +70,7 @@ class _RegestationInvestorScreenState extends State<RegestationInvestorScreen> {
               Future.delayed(const Duration(seconds: 1));
               Navigator.pushNamed(context, HomeMain.routename);
             }else if(state is RegestrationInvestorFailed){
-            ShowToastWidget.showToast(state.errMsg!);
+            ShowToastWidget.showToast(message: state.errMsg!);
           }else
 
             {
@@ -304,7 +304,7 @@ class _RegestationInvestorScreenState extends State<RegestationInvestorScreen> {
 
                                                               setState(() {});
                                                             } else if (state is RegestrationBorrowerFailed) {
-                                                              ShowToastWidget.showToast("SomeThing Wrong !");
+                                                              ShowToastWidget.showToast(message: "SomeThing Wrong !");
                                                             } else {
                                                               const Center(child: CircularProgressIndicator());
                                                             }
