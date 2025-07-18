@@ -10,7 +10,6 @@ import 'package:flutter_media_downloader/flutter_media_downloader.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:path_provider/path_provider.dart';
 
-import '../../../domain/model/opportunity/all_opportunity_model.dart';
 import 'opportunityDetails/opportunityDetails.dart';
 
 class CustomCardOpp extends StatefulWidget {
@@ -221,17 +220,13 @@ class _CustomCardOpp extends State<CustomCardOpp> with SingleTickerProviderState
 
       Response response = await dio.download(url, filePath, onReceiveProgress: (received, total) {
         if (total != -1) {
-          print("Download progress: \${(received / total * 100).toStringAsFixed(0)}%");
         }
       });
 
       if (response.statusCode == 200) {
-        print("File downloaded and saved at: \$filePath");
       } else {
-        print("Failed to download file: \${response.statusCode}");
       }
     } catch (e) {
-      print("Error occurred while downloading file: \$e");
     }
   }
 

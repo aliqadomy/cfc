@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../domain/model/opportunity/all_opportunity_model.dart';
+import '../../../../domain/model/opportunity/All_opportunity_model.dart';
 import '../../../../infrastructure/repository/opportunityRepo/opportunityRepo.dart';
 
 part 'all_opportunity_event.dart';
@@ -18,7 +18,6 @@ class AllOpportunityBloc
         {
           emit(AllOpportunityLoading());
           var res = await opportunityRepo.allOpportunity();
-          print("ffffeeee $res");
           res
               .fold((e) => emit(AllOpportunityFailed(errMsg: e.toString())),(r)=>emit(AllOpportunitySuccess(allOpportunityModel: r)));
         }

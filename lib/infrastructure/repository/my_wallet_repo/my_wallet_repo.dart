@@ -1,4 +1,5 @@
 import 'package:cfc_main/domain/interface/myWalletInterFce.dart';
+import 'package:cfc_main/domain/model/wallet/TotalCampaginInvestmentById.dart';
 import 'package:cfc_main/domain/model/wallet/UserKycModel.dart';
 import 'package:cfc_main/domain/model/wallet/WalletResponseModel.dart';
 import 'package:cfc_main/domain/model/wallet/WithDrawBalance.dart';
@@ -34,6 +35,22 @@ class MyWalletRepo extends MyWalletInterFce
     }
   }
 
+  Future<Either<dynamic, TotalCampaginInvestmentById>> totalInvestmentInOpportunityById(int id) async{
+    try {
+      final response = await myWalletprovider.totalInvestmentInOpportunityById(id);
+      if (response.data['status'] == false) {
+        return Left(AppException(response.data['response'] ?? 'Unknown error occurred'));
+      }
+      final walletBalance = TotalCampaginInvestmentById.fromJson(response.data['response']);
+      return Right(walletBalance);
+
+    } on DioException catch (e) {
+      return Left(AppException.fromDioError(e));
+    } catch (error) {
+      return Left(AppException(error.toString()));
+    }
+  }
+
   @override
   Future<Either<dynamic, List<WalletData>>> finicialStatment(int role_type) async{
     try {
@@ -47,6 +64,8 @@ class MyWalletRepo extends MyWalletInterFce
         {
           statment.add(WalletData.fromJson(i));
         }
+      statment.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+
       return Right(statment);
 
     } on DioException catch (e) {
@@ -117,7 +136,6 @@ Future<Either<dynamic, InvestResponse>> invest(String amount,String invester,Str
   Future<Either<dynamic, PaymentGetWayModel>> addBalance(int amount) async{
     try {
       final response = await myWalletprovider.addBalance(amount);
-      print("$response");
       if (response.data['status'] == false) {
         return Left(AppException(response.data['response'] ?? 'Unknown error occurred'));
       }

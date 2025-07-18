@@ -8,6 +8,11 @@ class Opportunitydataprovider {
         url: "https://api.cfc.sa/api/list_campaign", header: {});
   }
 
+  Future<dynamic> showKycData() async {
+        return await DioHelper.getData(
+            url: "https://api.cfc.sa/api/show_userkyc", header: {});
+  }
+
   Future<dynamic> myOpportunityData() async {
     return await DioHelper.getData(
         url: "https://api.cfc.sa/api/user_campaign/5", header: {});

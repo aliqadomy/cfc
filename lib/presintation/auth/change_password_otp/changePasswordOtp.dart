@@ -67,14 +67,14 @@ class _ChangePasswordOtpState extends State<ChangePasswordOtp> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(AppLocalizations.of(context)!.changePassword,
+                Text(AppLocalizations.of(context)!.fPass,
                   style: const TextStyle(color: AppColors.black, fontSize: 20),),
                 const SizedBox(height: 50),
                 SizedBox(
                     height: MediaQuery.of(context).size.height*0.07,
                     child:
                     Customtextinput(
-                        hintText: AppLocalizations.of(context)!.currentPass,
+                        hintText: AppLocalizations.of(context)!.pass,
                         controller: passwordController,
                         secure: secure,
                         validator: (value) {
@@ -103,7 +103,7 @@ class _ChangePasswordOtpState extends State<ChangePasswordOtp> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height*0.07,
                   child: Customtextinput(
-                    hintText:AppLocalizations.of(context)!.pass,
+                    hintText:AppLocalizations.of(context)!.conPass,
                     controller: confirmPasswordController,
                     secure: secureTwo,
                     validator: (value) {
@@ -131,7 +131,6 @@ class _ChangePasswordOtpState extends State<ChangePasswordOtp> {
                 const SizedBox(height: 30),
 
                 CustomButton(
-
                   onTap: () async{
                     SharedPreferences prefs =await SharedPreferences.getInstance();
                     var email = prefs.getString('email');
@@ -145,7 +144,7 @@ class _ChangePasswordOtpState extends State<ChangePasswordOtp> {
 
                   },
                   colors: AppColors.green,
-                  title: AppLocalizations.of(context)!.changePassword,)
+                  title: AppLocalizations.of(context)!.save,)
 
               ],
             ),

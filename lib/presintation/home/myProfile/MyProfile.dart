@@ -31,6 +31,44 @@ class _MyprofileState extends State<Myprofile> {
     super.initState();
   }
 
+  final List<String> _dropdownMartialStatus = ['متزوج', 'اعزب', 'مطلق', 'ارمل'];
+  final List<String> _dropdownRegions = [
+    'الرياض',
+    'المنطقة الشرقية',
+    'مكة المكرمة',
+    'المدينة المنورة',
+    'القصيم',
+    'عسير',
+    'تبوك',
+    'حائل',
+    'الحدود الشمالية',
+    'جازان',
+    'نجران',
+    'الباحة',
+    'الجوف',
+  ];
+  final List<String> _dropdownIndividualIdentityType = [
+    'سعودي',
+    'مقيم',
+    'مجلس التعاون الخليجي',
+  ];
+  final List<String> _dropdownJobStatus = [
+    'موظف',
+    'غير موظف',
+    'طالب علم',
+    'رجل اعمال',
+    'متقاعد'
+  ];
+  final List<String> _dropdownEducation = [
+    'دكتوراة',
+    'ماجستير',
+    'بكالوريس',
+    'دبلوم',
+    'ثانوية عامة',
+    'اخرى'
+  ];
+  final List<String> _dropdownGender = ["ذكر", "انثى"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,11 +216,8 @@ class _MyprofileState extends State<Myprofile> {
                                           ),
                                           Customtextinput(
                                             readOnly: true,
-                                            hintText: state.list[1].infoType?[0]
-                                                        .detail?[0].value ==
-                                                    "2"
-                                                ? "ذكر"
-                                                : "انثى",
+                                            hintText: _dropdownGender[int.tryParse(state.list[1].infoType![0]
+                                                .detail![0].value!)!-1],
                                             secure: false,
                                           ),
                                         ],
@@ -201,22 +236,8 @@ class _MyprofileState extends State<Myprofile> {
                                           ),
                                           Customtextinput(
                                             readOnly: true,
-                                            hintText: state.list[1].infoType?[0]
-                                                        .detail?[1].value ==
-                                                    "1"
-                                                ? "اعزب"
-                                                : state.list[1].infoType?[0]
-                                                            .detail?[1].value ==
-                                                        "2"
-                                                    ? "متزوج"
-                                                    : state
-                                                                .list[1]
-                                                                .infoType?[0]
-                                                                .detail?[1]
-                                                                .value ==
-                                                            "3"
-                                                        ? "مطلق"
-                                                        : "غير ذالك",
+                                            hintText: _dropdownMartialStatus[int.tryParse(state.list[1].infoType![0]
+                                                .detail![0].value!)!-1],
                                             secure: false,
                                           ),
                                         ],
@@ -234,30 +255,8 @@ class _MyprofileState extends State<Myprofile> {
                                             height: 5,
                                           ),
                                           Customtextinput(
-                                            hintText: state.list[1].infoType?[0]
-                                                        .detail?[2].value ==
-                                                    "1"
-                                                ? "دكتوراة"
-                                                : state.list[1].infoType?[0]
-                                                            .detail?[1].value ==
-                                                        "2"
-                                                    ? "ماجستير"
-                                                    : state
-                                                                .list[1]
-                                                                .infoType?[0]
-                                                                .detail?[1]
-                                                                .value ==
-                                                            "3"
-                                                        ? "دبلوم"
-                                                        : state
-                                                                    .list[1]
-                                                                    .infoType?[
-                                                                        0]
-                                                                    .detail?[1]
-                                                                    .value ==
-                                                                "4"
-                                                            ? "ثانوية عامه"
-                                                            : "اخرى",
+                                            hintText: _dropdownEducation[int.tryParse(state.list[1].infoType![0]
+                                                .detail![0].value!)!-1],
                                             secure: false,
                                             readOnly: true,
                                           ),
@@ -276,30 +275,8 @@ class _MyprofileState extends State<Myprofile> {
                                             height: 5,
                                           ),
                                           Customtextinput(
-                                            hintText: state.list[1].infoType?[0]
-                                                        .detail?[3].value ==
-                                                    "1"
-                                                ? "موظف"
-                                                : state.list[1].infoType?[0]
-                                                            .detail?[1].value ==
-                                                        "2"
-                                                    ? "غير موظف"
-                                                    : state
-                                                                .list[1]
-                                                                .infoType?[0]
-                                                                .detail?[1]
-                                                                .value ==
-                                                            "3"
-                                                        ? "طالب علم"
-                                                        : state
-                                                                    .list[1]
-                                                                    .infoType?[
-                                                                        0]
-                                                                    .detail?[1]
-                                                                    .value ==
-                                                                "4"
-                                                            ? "رجل اعمال"
-                                                            : "متقاعد",
+                                            hintText:_dropdownJobStatus[int.tryParse(state.list[1].infoType![0]
+                                                .detail![0].value!)!-1],
                                             secure: false,
                                             readOnly: true,
                                           ),
@@ -319,7 +296,7 @@ class _MyprofileState extends State<Myprofile> {
                                           ),
                                           Customtextinput(
                                             hintText: state.list[1].infoType?[0]
-                                                .detail?[4].value,
+                                                .detail?[4].value ,
                                             secure: false,
                                             readOnly: true,
                                           ),
@@ -568,7 +545,7 @@ class _MyprofileState extends State<Myprofile> {
                                         child: radioButton(
                                             state.list[4].infoType![0]
                                                 .detail![5].value!,
-                                            "هل لديك صلة قرابة بدابطة الدم او الزواج وصولا الي الدرجة الثانية او مقربا من شخص مكلف بمهمات عليا في المملكة او دولة اجنبية او مناصب اداة عليا او في وظيفة في المنظمات الدولية ؟ ")),
+                                            "هل لديك صلة قرابة برابطة الدم او الزواج وصولا الي الدرجة الثانية او مقربا من شخص مكلف بمهمات عليا في المملكة او دولة اجنبية او مناصب اداة عليا او في وظيفة في المنظمات الدولية ؟ ")),
                                     SizedBox(
                                         height: 140,
                                         child: radioButton(
@@ -644,14 +621,14 @@ class _MyprofileState extends State<Myprofile> {
       return "الحدود الشمالية";
     } else if (type == "10") {
       return "جازان";
-    } else if (type == "10") {
+    } else if (type == "11") {
       return "نجران";
-    } else if (type == "10") {
+    } else if (type == "12") {
       return "الباحة";
-    } else if (type == "10") {
+    } else if (type == "13") {
       return "الجوف";
     } else {
-      return "غير ذالك";
+      return "غير ذلك";
     }
   }
 
@@ -663,12 +640,11 @@ class _MyprofileState extends State<Myprofile> {
     } else if (type == "3") {
       return "مجلس التعاون الخليجي";
     } else {
-      return "غير ذالك";
+      return "غير ذلك";
     }
   }
 
   radioButton(String selectedAnswer, String text) {
-    String displayValue = selectedAnswer == "1" ? 'Yes' : 'No';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -682,13 +658,13 @@ class _MyprofileState extends State<Myprofile> {
               groupValue: selectedAnswer,
               onChanged: null, // Disable interaction
             ),
-            const Text('Yes'),
+            Text(AppLocalizations.of(context)!.yes),
             Radio<String>(
               value: "0", // Represents "No"
               groupValue: selectedAnswer,
               onChanged: null, // Disable interaction
             ),
-            const Text('No'),
+            Text(AppLocalizations.of(context)!.no)
           ],
         ),
       ],

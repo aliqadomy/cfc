@@ -1,4 +1,3 @@
-
 import 'package:cfc_main/domain/model/wallet/finicialStatmentModel.dart';
 import 'package:cfc_main/infrastructure/data_soruce/auth/otpProvider.dart';
 import 'package:cfc_main/infrastructure/data_soruce/my_wallet/myWalletProvider.dart';
@@ -10,6 +9,7 @@ import 'package:cfc_main/infrastructure/repository/otpRepo.dart';
 import 'package:cfc_main/infrastructure/repository/visitorRepo.dart';
 import 'package:cfc_main/presintation/auth/change_password_otp/change_password_otp_bloc.dart';
 import 'package:cfc_main/presintation/auth/verfiy_otp/verfiy_otp_bloc.dart';
+import 'package:cfc_main/presintation/home/wallet/balanceBloc/balance_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,7 +50,6 @@ import '../presintation/visitor/visitorScreen.dart';
 import '../presintation/visitor/visitor_bloc.dart';
 import '../presintation/welcome/welcomePage.dart';
 
-
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -73,7 +72,6 @@ class AppRouter {
         return PageTransition(
             child: MultiBlocProvider(
               providers: [
-
                 BlocProvider<LoginBloc>(
                   create: (context) => LoginBloc(
                       loginRepo: LoginRepo(
@@ -81,29 +79,32 @@ class AppRouter {
                   child: const LoginScreen(),
                 ),
                 BlocProvider<VerfiyOtpBloc>(
-                  create: (context) => VerfiyOtpBloc(sendOtpRepo: SendOtpRepo(otpProvider: OtpProvider()))
-                    ),
-
-              ], child: const LoginScreen(),
+                    create: (context) => VerfiyOtpBloc(
+                        sendOtpRepo: SendOtpRepo(otpProvider: OtpProvider()))),
+              ],
+              child: const LoginScreen(),
             ),
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: LoginScreen.routename));
 
       case VerfiyOtp.routename:
         return PageTransition(
-            child:  BlocProvider(
-  create: (context) => VerfiyOtpBloc(sendOtpRepo: SendOtpRepo(otpProvider: OtpProvider())),
-  child: const VerfiyOtp(),
-),
+            child: BlocProvider(
+              create: (context) => VerfiyOtpBloc(
+                  sendOtpRepo: SendOtpRepo(otpProvider: OtpProvider())),
+              child: const VerfiyOtp(),
+            ),
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: VerfiyOtp.routename));
 
       case ChangePasswordOtp.routename:
         return PageTransition(
-            child:  BlocProvider(
-  create: (context) => ChangePasswordOtpBloc(resetPassRepo: ResetPassRepo(resetAuth: ResetAuth(dio: Dio()))),
-  child: const ChangePasswordOtp(),
-),
+            child: BlocProvider(
+              create: (context) => ChangePasswordOtpBloc(
+                  resetPassRepo:
+                      ResetPassRepo(resetAuth: ResetAuth(dio: Dio()))),
+              child: const ChangePasswordOtp(),
+            ),
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: ChangePasswordOtp.routename));
 
@@ -151,7 +152,7 @@ class AppRouter {
       case OpportunityDetails.routename:
         return PageTransition(
             child: OpportunityDetails(
-              allOpportunityModel: settings.arguments,
+              allOpportunityModel: settings.arguments ?? "",
             ),
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: OpportunityDetails.routename));
@@ -160,7 +161,6 @@ class AppRouter {
         return PageTransition(
             child: MultiBlocProvider(
               providers: [
-
                 BlocProvider(
                   create: (context) => AttachmentBloc(
                       opportunityRepo: OpportunityRepo(
@@ -173,6 +173,10 @@ class AppRouter {
                 ),
                 BlocProvider(
                     create: (context) => InvestBloc(
+                        myWalletRepo: MyWalletRepo(
+                            myWalletprovider: Mywalletprovider()))),
+                BlocProvider(
+                    create: (context) => BalanceBloc(
                         myWalletRepo:
                             MyWalletRepo(myWalletprovider: Mywalletprovider())))
               ],
@@ -220,10 +224,9 @@ class AppRouter {
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: NotificationScreen.routename));
 
-
       case WebViewPage.routename:
         return PageTransition(
-            child:  WebViewPage(url: settings.arguments as String),
+            child: WebViewPage(url: settings.arguments as String),
             type: PageTransitionType.fade,
             settings: const RouteSettings(name: WebViewPage.routename));
 

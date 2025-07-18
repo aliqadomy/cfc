@@ -51,36 +51,36 @@ class OpportunityDetails extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.only(
-                            top: 20, left: 20, right: 20),
+                            top: 20, left: 10, right: 20),
                         height: MediaQuery.of(context).size.height * 0.46,
                         child: ListView(
                             children: [
                           NearestDateFlag(
                             nearestDateModel:AppLocalizations.of(context)!.murSuk,
-                            title: AppLocalizations.of(context)!.product,
+                            title: AppLocalizations.of(context)?.product??"Un available",
                           ),
                           NearestDateFlag(
                             // add percntage
                             nearestDateModel:
                             allOpportunityModel!.apr,
-                            title: AppLocalizations.of(context)!.annRtu,
+                            title: AppLocalizations.of(context)?.annRtu??"Un available",
                           ),
                           NearestDateFlag(
                             nearestDateModel:
                             allOpportunityModel!.totalValuation,
-                            title: AppLocalizations.of(context)!.totVal,
+                            title: AppLocalizations.of(context)?.totVal ??"Un available",
                           ),
                           NearestDateFlag(
-                            nearestDateModel: allOpportunityModel!.openDate,
+                            nearestDateModel: allOpportunityModel?.openDate??"Un available",
                             title: AppLocalizations.of(context)!.stDat,
                           ),
                           NearestDateFlag(
-                            nearestDateModel: allOpportunityModel!.closeDate,
+                            nearestDateModel: allOpportunityModel?.closeDate??"Un available",
                             title: AppLocalizations.of(context)!.clDat,
                           ),
 
                               NearestDateFlag(
-                                nearestDateModel: calculateDateDifference(allOpportunityModel!.openDate,allOpportunityModel!.closeDate),
+                                nearestDateModel: calculateDateDifference(allOpportunityModel?.openDate??"00000-00-00T00:00:00",allOpportunityModel?.closeDate??"00000-00-00T00:00:00"),
                                 title: AppLocalizations.of(context)!.duration,
                               ),
 
@@ -101,9 +101,9 @@ class OpportunityDetails extends StatelessWidget {
 
     );
   }
-  int calculateDateDifference(String startDateStr, String endDateStr) {
-    DateTime startDate = DateTime.parse(startDateStr);
-    DateTime endDate = DateTime.parse(endDateStr);
+  int calculateDateDifference(String? startDateStr, String? endDateStr) {
+    DateTime startDate = DateTime.parse(startDateStr??"00000-00-00T00:00:00");
+    DateTime endDate = DateTime.parse(endDateStr??"00000-00-00T00:00:00");
 
     Duration difference = endDate.difference(startDate);
 

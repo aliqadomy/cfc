@@ -4,9 +4,11 @@ import 'package:cfc_main/domain/model/opportunity/ModefiyKyc.dart';
 import 'package:cfc_main/domain/model/opportunity/OpportunityDetails.dart';
 import 'package:cfc_main/infrastructure/data_soruce/opportuinity/OpportunityDataProvider.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:dio/dio.dart';
 import '../../../core/appException.dart';
-import '../../../domain/model/opportunity/all_opportunity_model.dart';
+import '../../../domain/model/kyc/ShowKyc.dart';
+import '../../../domain/model/opportunity/All_opportunity_model.dart';
 
 class OpportunityRepo extends OpportunityInterFace {
   Opportunitydataprovider opportunitydataprovider;
@@ -17,6 +19,7 @@ class OpportunityRepo extends OpportunityInterFace {
     AllOpportunityModel allOpportunityModel;
     try {
       final response = await opportunitydataprovider.allOpportunityData();
+      print("sssssss $response");
       if (response.data['status'] == false) {
         return Left(AppException(
             response.data['response'] ?? 'Unknown error occurred'));
@@ -27,6 +30,7 @@ class OpportunityRepo extends OpportunityInterFace {
     } on DioException catch (e) {
       return Left(AppException.fromDioError(e));
     } catch (error) {
+
       return Left(AppException(error.toString()));
     }
   }
@@ -93,13 +97,10 @@ class OpportunityRepo extends OpportunityInterFace {
 
 
       if (response.data['status'] == false) {
-        print("ssssseeee1 $response");
         return Left(AppException(
-
-            response.data['response'] ?? 'Unknown error occurred'));
+            response.data['response']['message'] ?? 'Unknown error occurred'));
       }
       var res = ModefiyKyc.fromJson(response.data['response']);
-      print("eeeeeee");
       return Right(res);
     } on DioException catch (e) {
 
@@ -170,6 +171,24 @@ class OpportunityRepo extends OpportunityInterFace {
       return Left(AppException.fromDioError(e));
     } catch (error) {
       print("ppp ${error.toString()}");
+      return Left(AppException(error.toString()));
+    }
+  }
+  @override
+  Future<Either<dynamic, List<ShowKyc>>> showKyc() async {
+
+    try {
+      final response = await opportunitydataprovider.showKycData();
+      if (response.data['status'] == false) {
+        return Left(AppException(
+            response.data['response'] ?? 'Unknown error occurred'));
+      }
+      final List<dynamic> rawList = response.data['response'];
+      final List<ShowKyc> showKyc = rawList.map((json) => ShowKyc.fromJson(json)).toList();
+      return Right(showKyc);
+    } on DioException catch (e) {
+      return Left(AppException.fromDioError(e));
+    } catch (error) {
       return Left(AppException(error.toString()));
     }
   }

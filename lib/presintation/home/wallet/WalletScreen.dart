@@ -35,6 +35,7 @@ class _WalletscreenState extends State<Walletscreen> {
   String? withdrawMsg;
   bool isLoading = true;
 
+  bool isLoadingWithdraw=false;
   bool paymentGetWayLoading=false;
 
   @override
@@ -183,217 +184,157 @@ class _WalletscreenState extends State<Walletscreen> {
                                           .bottom),
                                   child: StatefulBuilder(
                                     builder: (innerContext, setState) {
-                                      return BlocListener<WithdrawBloc,
-                                          WithdrawState>(
+                                      return BlocListener<WithdrawBloc, WithdrawState>(
                                         listener: (context, state) {
-                                          if (state
-                                              is WithdrawBalanceStateSuccess) {
-                                            withdrawMsg =
-                                                state.withDrawBalance.status;
-                                            ShowToastWidget.showToast(message: withdrawMsg!
-                                                );
-                                            Future.delayed(
-                                                const Duration(seconds: 2), () {
-                                              Navigator.pop(
-                                                  context); // Close bottom sheet
+                                          if (state is WithdrawBalanceStateSuccess) {
+                                            setState(() {
+                                              isLoadingWithdraw = false;
                                             });
-                                          } else if (state
-                                              is WithdrawBalanceStateFaield) {
+                                            withdrawMsg = state.withDrawBalance.status;
+                                            ShowToastWidget.showToast(message: AppLocalizations.of(context)!.withdrawSuccess);
+                                            Future.delayed(const Duration(seconds: 2), () {
+                                              Navigator.pop(context);
+                                            });
+                                          } else if (state is WithdrawBalanceStateFaield) {
+                                            setState(() {
+                                              isLoadingWithdraw = false;
+                                            });
                                             withdrawMsg = state.errMsg;
-                                            ShowToastWidget.showToast(
-                                                message: withdrawMsg!);
-                                            Future.delayed(
-                                                const Duration(seconds: 2), () {
-                                              Navigator.pop(
-                                                  context); // Close bottom sheet
+                                            ShowToastWidget.showToast(message: withdrawMsg!);
+                                            Future.delayed(const Duration(seconds: 2), () {
+                                              Navigator.pop(context);
                                             });
                                           }
                                         },
-                                        child:
-                                            userKyc?.infoType?[1].detail?[0]
-                                                        .value ==
-                                                    null
-                                                ? Container(
-                                                    alignment: Alignment.center,
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.33,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: const Text(
-                                                        "No Wallet Available"))
-                                                : Container(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.33,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                        child: isLoadingWithdraw
+                                            ? SizedBox(
+                                          height: MediaQuery.of(context).size.height * 0.33,
+                                          child: const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        )
+                                            : userKyc?.infoType?[1].detail?[0].value == null
+                                            ? Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.all(8),
+                                          height: MediaQuery.of(context).size.height * 0.33,
+                                          width: MediaQuery.of(context).size.width,
+                                          child: const Text("No Wallet Available"),
+                                        )
+                                            : Container(
+                                          padding: const EdgeInsets.all(8),
+                                          height: MediaQuery.of(context).size.height * 0.33,
+                                          width: MediaQuery.of(context).size.width,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(16.0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      AppLocalizations.of(context)!
+                                                          .balanceWithdrawal,
+                                                      style: const TextStyle(
+                                                          color: AppColors.blue, fontSize: 20),
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
                                                       children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(16.0),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                AppLocalizations.of(
-                                                                        context)!
-                                                                    .balanceWithdrawal,
-                                                                style: const TextStyle(
-                                                                    color:
-                                                                        AppColors
-                                                                            .blue,
-                                                                    fontSize:
-                                                                        20),
-                                                              ),
-                                                              // Handle null cases gracefully
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    '${AppLocalizations.of(context)!.maximum} : ${walletResponse.walletBalance.toString()}',
-                                                                  ),
-                                                                  AppColors
-                                                                      .saudiSign(
-                                                                          Colors
-                                                                              .white)
-                                                                ],
-                                                              ),
-                                                              userKyc
-                                                                          ?.infoType?[
-                                                                              1]
-                                                                          .detail?[
-                                                                              0]
-                                                                          .value ==
-                                                                      null
-                                                                  ? SizedBox()
-                                                                  : Text(
-                                                                      '${AppLocalizations.of(context)!.accNum} : ${userKyc!.infoType![1].detail![0].value!}',
-                                                                    ),
-                                                              userKyc
-                                                                          ?.infoType?[
-                                                                              1]
-                                                                          .detail?[
-                                                                              1]
-                                                                          .value ==
-                                                                      null
-                                                                  ? SizedBox()
-                                                                  : Text(
-                                                                      '${AppLocalizations.of(context)?.bank ?? ""} : ${Banks.getBankAtIndex(int.parse(userKyc!.infoType![1].detail![1].value!) - 1) }',
-                                                                    ),
-                                                              Form(
-                                                                key: _formKey,
-                                                                child: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .end,
-                                                                  children: [
-                                                                    Customtextinput(
-                                                                      hintText:
-                                                                          AppLocalizations.of(context)
-                                                                              ?.withdrawAmount,
-                                                                      controller:
-                                                                          balanceText,
-                                                                      keyboardType:
-                                                                          TextInputType
-                                                                              .number,
-                                                                      secure:
-                                                                          false,
-                                                                      validator:
-                                                                          (value) {
-                                                                        if (value ==
-                                                                                null ||
-                                                                            value
-                                                                                .isEmpty) {
-                                                                          return AppLocalizations.of(context)!
-                                                                              .required;
-                                                                        } else if (double.tryParse(value) ==
-                                                                                null ||
-                                                                            double.parse(value) >
-                                                                                walletResponse.walletBalance!.toDouble()) {
-                                                                          return '${AppLocalizations.of(context)!.accNum} ${walletResponse.walletBalance.toString()}';
-                                                                        }
-                                                                        return null;
-                                                                      },
-                                                                      icon:
-                                                                          Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            12.0),
-                                                                        child: Image
-                                                                            .asset(
-                                                                          'assets/images/saudi_sign.png',
-                                                                          width:
-                                                                              10,
-                                                                          height:
-                                                                              10,
-                                                                        ),
-                                                                      ),
-                                                                      showPrefixIcon:
-                                                                          true,
-                                                                    ),
-                                                                    CustomButton(
-                                                                      colors: AppColors
-                                                                          .green,
-                                                                      title:
-                                                                          "${AppLocalizations.of(innerContext)?.withdraw}",
-                                                                      onTap:
-                                                                          () {
-                                                                        if (_formKey
-                                                                            .currentState!
-                                                                            .validate()) {
-                                                                          setState(
-                                                                              () {
-                                                                            isLoading =
-                                                                                false;
-                                                                          });
-                                                                          BlocProvider.of<WithdrawBloc>(innerContext)
-                                                                              .add(
-                                                                            WithdrawBalance(
-                                                                              amount: balanceText.text,
-                                                                              creditAccount: userKyc!.infoType![1].detail![0].value.toString(),
-                                                                              bic: Banks.getBankAtIndex(int.parse(userKyc!.infoType![1].detail![1].value!) - 1),
-                                                                            ),
-                                                                          );
-                                                                        } else {
-                                                                          print(
-                                                                              "Validation Failed");
-                                                                        }
-                                                                      },
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        )
+                                                        Text(
+                                                          '${AppLocalizations.of(context)!.maximum} : ${walletResponse.walletBalance.toString()}',
+                                                        ),
+                                                        AppColors.saudiSign(Colors.white),
                                                       ],
                                                     ),
-                                                  ),
+                                                    if (userKyc?.infoType?[1].detail?[0].value != null)
+                                                      Text(
+                                                        '${AppLocalizations.of(context)!.accNum} : ${userKyc!.infoType![1].detail![0].value!}',
+                                                      ),
+                                                    if (userKyc?.infoType?[1].detail?[1].value != null)
+                                                      Text(
+                                                        '${AppLocalizations.of(context)?.bank ?? ""} : ${Banks.getBankAtIndex(int.parse(userKyc!.infoType![1].detail![1].value!) - 1)}',
+                                                      ),
+                                                    const SizedBox(height: 8),
+                                                    Form(
+                                                      key: _formKey,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        children: [
+                                                          Customtextinput(
+                                                            hintText: AppLocalizations.of(context)
+                                                                ?.withdrawAmount,
+                                                            controller: balanceText,
+                                                            keyboardType: TextInputType.number,
+                                                            secure: false,
+                                                            validator: (value) {
+                                                              if (value == null || value.isEmpty) {
+                                                                return AppLocalizations.of(context)!
+                                                                    .required;
+                                                              } else if (double.tryParse(value) ==
+                                                                  null ||
+                                                                  double.parse(value) >
+                                                                      walletResponse.walletBalance!
+                                                                          .toDouble()) {
+                                                                return '${AppLocalizations.of(context)!.accNum} ${walletResponse.walletBalance.toString()}';
+                                                              }
+                                                              return null;
+                                                            },
+                                                            icon: Padding(
+                                                              padding: const EdgeInsets.all(12.0),
+                                                              child: Image.asset(
+                                                                'assets/images/saudi_sign.png',
+                                                                width: 10,
+                                                                height: 10,
+                                                              ),
+                                                            ),
+                                                            showPrefixIcon: true,
+                                                          ),
+                                                          const SizedBox(height: 12),
+                                                          CustomButton(
+                                                            colors: AppColors.green,
+                                                            title: AppLocalizations.of(innerContext)
+                                                                ?.withdraw ??
+                                                                "Withdraw",
+                                                            onTap: () {
+                                                              if (_formKey.currentState!.validate()) {
+                                                                setState(() {
+                                                                  isLoadingWithdraw = true;
+                                                                });
+                                                                BlocProvider.of<WithdrawBloc>(
+                                                                    innerContext)
+                                                                    .add(
+                                                                  WithdrawBalance(
+                                                                    amount: balanceText.text,
+                                                                    creditAccount: userKyc!
+                                                                        .infoType![1]
+                                                                        .detail![0]
+                                                                        .value
+                                                                        .toString(),
+                                                                    bic: Banks.getBankAtIndex(
+                                                                      int.parse(userKyc!
+                                                                          .infoType![1]
+                                                                          .detail![1]
+                                                                          .value!) -
+                                                                          1,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              } else {
+                                                                print("Validation Failed");
+                                                              }
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       );
                                     },
                                   ),
@@ -668,7 +609,7 @@ class _WalletscreenState extends State<Walletscreen> {
                                   top: 20, left: 20, right: 20),
                               height: MediaQuery.of(context).size.height * 0.31,
                               child: ListView.builder(
-                                  reverse: true,
+                                  reverse: false,
                                   itemCount: state.walletData.length,
                                   itemBuilder: (context, index) {
                                     return Column(
@@ -709,14 +650,17 @@ class _WalletscreenState extends State<Walletscreen> {
                                                         },
                                                         icon: const Icon(Icons
                                                             .arrow_back_ios_new)),
-                                                    state.walletData[index]
-                                                                .type ==
-                                                            1
+                                                    state.walletData[index].type == 1
                                                         ? Text(
                                                             AppLocalizations.of(
                                                                     context)!
                                                                 .deposit)
-                                                        : Text(
+                                                        :state.walletData[index].type == 2 && state.walletData[index].opportunityId! >0
+                                                        ?Text(
+                                                        AppLocalizations.of(
+                                                            context)!
+                                                            .investemntWallet): Text(
+
                                                             AppLocalizations.of(
                                                                     context)!
                                                                 .withdraw),

@@ -14,3 +14,15 @@ class ModefiyKycFailed extends ModefiyKycState{
 
 }
 class ModefiyKycLoading extends ModefiyKycState{}
+
+
+class ShowKycSuccess extends ModefiyKycState{
+  List <ShowKyc> showKyc;
+  ShowKycSuccess({required this.showKyc});
+}
+class ShowKycFailed extends ModefiyKycState{
+  String errMsg;
+  ShowKycFailed({required this.errMsg});
+
+}
+class ShowKycLoading extends ModefiyKycState{}

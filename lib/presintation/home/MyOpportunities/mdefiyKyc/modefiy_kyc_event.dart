@@ -64,3 +64,7 @@ class ModefiyKycEvents extends ModefiyKycEvent {
   final String arabicName;
   final String englishName;
 }
+
+
+class ShowModefiyKycEvent extends ModefiyKycEvent{
+}

@@ -47,19 +47,23 @@ class NearestDateFlag extends StatelessWidget {
             height: 2,
           ),
           Container(
-            padding: const EdgeInsets.only(left: 30, right: 10,bottom: 10,top: 5),
+            padding: const EdgeInsets.only(left: 5, right: 5,bottom: 10,top: 5),
             width: screenWidth*0.30,
             color: AppColors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "${nearestDateModel ?? "0"}",
-                  textAlign: TextAlign.center,
-                  textScaleFactor: textScale,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      "${nearestDateModel ?? "0"}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
                 haveSign

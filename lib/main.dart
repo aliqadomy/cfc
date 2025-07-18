@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
       });
     } else {
       setState(() {
-        _locale = Locale('en');
+        _locale = const Locale('en');
       });
     }
   }
@@ -112,6 +112,7 @@ class _MyAppState extends State<MyApp> {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         locale: _locale,
+        navigatorKey: NavigationService.navigatorKey,
         onGenerateRoute: AppRouter.generateRoute,
         title: 'CFC',
         theme: ThemeData(

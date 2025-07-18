@@ -1,3 +1,4 @@
+import 'package:cfc_main/presintation/auth/login/screen/login.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -55,6 +56,10 @@ class TokenManager{
     var token = prefs.getString('token');
     return token;
   }
+  static Future<void> clearToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+  }
 }
 
 class CustomLanguage{
@@ -63,6 +68,10 @@ class CustomLanguage{
     var token = prefs.getString('token');
     return token;
   }
+}
+
+class NavigationService {
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
 class Urls{
@@ -111,11 +120,51 @@ class DioHelper{
 
         return handler.next(options);
       },
+      onError: (DioException error, handler) async {
+        if (error.response?.statusCode == 401) {
+          // Token expired or unauthorized
+
+          // Only show the dialog if the navigator is mounted
+          if (NavigationService.navigatorKey.currentContext != null) {
+            showDialog(
+              context: NavigationService.navigatorKey.currentContext!,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Session Expired"),
+                  content: const Text("Your session has expired. Please log in again."),
+                  actions: [
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.of(context).pop(); // Close the dialog
+
+                        // Clear token/session data
+                        await TokenManager.clearToken();
+
+                        // Navigate to Login Screen
+                        NavigationService.navigatorKey.currentState?.pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (_) => const LoginScreen()),
+                              (route) => false,
+                        );
+
+                      },
+                      child: const Text("Login Again"),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        }
+
+        return handler.next(error);
+      },
+
     ));
   }
 
 
-//GET Method
+
   static Future<Response> getData({
     required url,
     Map<String, dynamic>? query,

@@ -133,9 +133,11 @@
   "checkNumerOtp": "Enter the 4-digit code sent to your email / phone number.",
   "fPass": "Forget Password",
   "otpNumberCheck": "Please enter all 4 digits",
-  "authFailed": "Login Failed"
-
-
-
+  "authFailed": "Login Failed",
+  "withdrawSuccess" : "processed successfully",
+  "save": "Save",
+  "yes": "Yes",
+  "no": "No",
+  "investemntWallet" : "Investment"
 
 }

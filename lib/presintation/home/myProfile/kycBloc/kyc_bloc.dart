@@ -14,7 +14,7 @@ class KycBloc extends Bloc<KycEvent, KycState> {
   KycBloc({required this.kycRepo}) : super(KycInitial()){
     on<KycEvent>((event, emit) async{
       var res =await kycRepo.showUserKyc();
-      print("hamza ---------- $res");
+
       emit(KycStateLoading());
       res
           .fold((e) => emit(KycStateFailed(msg: e.toString())),(r)=>emit(KycStateSuccess(list: r)));

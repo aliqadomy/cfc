@@ -14,3 +14,13 @@ class BalanceFailed extends BalanceState{
   BalanceFailed({required this.errMsg});
 }
 class BalanceLoading extends BalanceState{}
+
+class TotlaBalanceSuccess extends BalanceState{
+  double total;
+  TotlaBalanceSuccess({required this.total});
+}
+class TotlaBalanceFailed extends BalanceState{
+  String errMsg;
+  TotlaBalanceFailed({required this.errMsg});
+}
+class TotlaBalanceLoading extends BalanceState{}

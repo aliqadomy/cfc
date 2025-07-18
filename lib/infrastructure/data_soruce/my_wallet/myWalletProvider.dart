@@ -8,6 +8,12 @@ class Mywalletprovider{
     });
   }
 
+  Future<dynamic> totalInvestmentInOpportunityById(int id)async{
+    return await DioHelper.getData(url:"https://api.cfc.sa/api/walletSumInvestorById",query: {
+      'id':id
+    });
+  }
+
   Future<dynamic> finicalStatment(int role_type)async{
     return await DioHelper.getData(url:"https://api.cfc.sa/api/getDataTable",query: {
       'role_type':role_type,

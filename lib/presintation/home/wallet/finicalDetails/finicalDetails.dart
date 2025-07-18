@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class FinicialDetails extends StatelessWidget {
-   FinicialDetails({Key? key,required this.data}) : super(key: key);
+  FinicialDetails({Key? key,required this.data}) : super(key: key);
   static const routename = '/finicalDetails';
   WalletData? data;
   @override
@@ -39,40 +39,37 @@ class FinicialDetails extends StatelessWidget {
               padding: const EdgeInsets.only(top: 50),
               child: Column(
                   children: [
-                NearestDateFlag(
-                  nearestDateModel: data!.refNum,
-                  title: AppLocalizations.of(context)!.refNum,
-                ),
+                    NearestDateFlag(
+                      nearestDateModel: data!.refNum,
+                      title: AppLocalizations.of(context)!.refNum,
+                    ),
+                    NearestDateFlag(
+                      nearestDateModel:
+                      data!.debitAmount==0?AppLocalizations.of(context)!.deposit: data!.creditAmount==0 && data!.opportunityId! > 0 ?AppLocalizations.of(context)!.investemntWallet:AppLocalizations.of(context)!.withdraw,
+                      title: AppLocalizations.of(context)!.typeOfMov,
 
+                    ),
+                    NearestDateFlag(
+                      nearestDateModel: data!.creditAmount,
+                      title: AppLocalizations.of(context)!.deposit,
+                      haveSign: true,
+                    ),
+                    NearestDateFlag(
+                      nearestDateModel: data!.debitAmount,
+                      title: AppLocalizations.of(context)!.withdraw,
+                      haveSign: true,
+                    ),
+                    NearestDateFlag(
+                      nearestDateModel: data!.walletAfter,
+                      title: AppLocalizations.of(context)!.balanceAfMov,
+                      haveSign: true,
+                    ),
+                    NearestDateFlag(
+                      nearestDateModel:data!.createdAt!.substring(0,10),
+                      title:AppLocalizations.of(context)!.dateOfMov,
+                    ),
 
-
-                NearestDateFlag(
-                  nearestDateModel:
-                  data!.debitAmount==0?AppLocalizations.of(context)!.deposit:AppLocalizations.of(context)!.withdraw,
-                  title: AppLocalizations.of(context)!.typeOfMov,
-
-                ),
-                NearestDateFlag(
-                  nearestDateModel: data!.creditAmount,
-                  title: AppLocalizations.of(context)!.deposit,
-                  haveSign: true,
-                ),
-                NearestDateFlag(
-                  nearestDateModel: data!.debitAmount,
-                  title: AppLocalizations.of(context)!.withdraw,
-                  haveSign: true,
-                ),
-                NearestDateFlag(
-                  nearestDateModel: data!.walletAfter,
-                  title: AppLocalizations.of(context)!.balanceAfMov,
-                  haveSign: true,
-                ),
-                NearestDateFlag(
-                  nearestDateModel:data!.createdAt!.substring(0,10),
-                  title:AppLocalizations.of(context)!.dateOfMov,
-                ),
-
-              ]),
+                  ]),
             ),
           ),
         )

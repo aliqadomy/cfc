@@ -90,13 +90,22 @@ class _HomeMainState extends State<HomeMain> {
                 BlocProvider(create:(context)=> WatheqBloc(watheqRepo: WatheqRepo(opportunitydataprovider: Opportunitydataprovider()))),
 
               ],
-              child: const Myopportunitiesscreen(),
+              child:  BlocProvider(
+                  create: (context) => KycBloc(kycRepo: KycRepo(kycprovider: Kycprovider())),
+                  child : const Myopportunitiesscreen()),
             )
                 : currentPage == 3
-                ?  BlocProvider(
-  create: (context) => KycBloc(kycRepo: KycRepo(kycprovider: Kycprovider())),
-  child: const Myprofile(),
-)
+                ? MultiBlocProvider(providers: [
+              BlocProvider(
+                create: (context) => KycBloc(kycRepo: KycRepo(kycprovider: Kycprovider()))
+              ),
+              BlocProvider(
+                create: (context) => ModefiyKycBloc(opportunityRepo: OpportunityRepo(opportunitydataprovider: Opportunitydataprovider())
+                ),
+              ),
+
+            ],  child: const Myprofile(),)
+
                 : const Settings()
 
         )

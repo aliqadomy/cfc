@@ -37,7 +37,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       backgroundColor: AppColors.background2,
       appBar: CustomAppBar(),
       body: Padding(
-        padding: const EdgeInsets.only(left: 25, right: 25),
+        padding: const EdgeInsets.only(left: 25, right: 25,top: 25),
         child: BlocListener<NearestDateBloc, NearestDateState>(
             listener: (BuildContext context, NearestDateState state) {
               if (state is NearestDateSuccess) {
@@ -66,9 +66,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 24,
-                        ),
                         BlocBuilder<DashBoardBloc, DashBoardState>(
                           builder: (context, state) {
                             if (state is InvestordashboardSuccess) {
@@ -325,6 +322,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                               0.27,
                                       child: ListView(
                                           children: [
+                                           const SizedBox(height: 10,),
                                         NearestDateFlag(
                                           nearestDateModel:
                                               nearestDateModel!.principle,
@@ -365,7 +363,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             } else {
                               return Card(
                                 shadowColor:
-                                    AppColors.shadowBlack.withOpacity(0.5),
+                                AppColors.shadowBlack.withOpacity(0.5),
                                 elevation: 4,
                                 child: Column(
                                   children: [
@@ -373,8 +371,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                       width: MediaQuery.of(context).size.width *
                                           0.85,
                                       height:
-                                          MediaQuery.of(context).size.height *
-                                              0.0,
+                                      MediaQuery.of(context).size.height *
+                                          0.07,
                                       decoration: const BoxDecoration(
                                         borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(16),
@@ -392,59 +390,59 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.only(
-                                          top: 20, left: 20, right: 20),
+                                      alignment: Alignment.center,
                                       height:
-                                          MediaQuery.of(context).size.height *
-                                              0.27,
-                                      child: ListView(children: [
-                                        NearestDateFlag(
-                                          nearestDateModel: null,
-                                          title:
-                                              AppLocalizations.of(context)!.id,
-                                          haveSign: true,
-                                        ),
-                                        NearestDateFlag(
-                                          nearestDateModel: null,
-                                          title: AppLocalizations.of(context)!
-                                              .opiNum,
-                                          haveSign: true,
-                                        ),
-                                        NearestDateFlag(
-                                          nearestDateModel: null,
-                                          title: AppLocalizations.of(context)!
-                                              .invNum,
-                                          haveSign: true,
-                                        ),
-                                        NearestDateFlag(
-                                          nearestDateModel: null,
-                                          title: AppLocalizations.of(context)!
-                                              .amoPaid,
-                                          haveSign: true,
-                                        ),
-                                        NearestDateFlag(
-                                          nearestDateModel: null,
-                                          title: AppLocalizations.of(context)!
-                                              .income,
-                                          haveSign: true,
-                                        ),
-                                        NearestDateFlag(
-                                            nearestDateModel: null,
-                                            title: AppLocalizations.of(context)!
-                                                .tax,          haveSign: true,),
-                                        NearestDateFlag(
-                                            nearestDateModel: null,
-                                            title: AppLocalizations.of(context)!
-                                                .fees,          haveSign: true,),
-                                        NearestDateFlag(
-                                            nearestDateModel: null,
-                                            title: AppLocalizations.of(context)!
-                                                .total,          haveSign: true,),
-                                        NearestDateFlag(
-                                            nearestDateModel: null,
-                                            title: AppLocalizations.of(context)!
-                                                .date,          haveSign: true,),
-                                      ]),
+                                      MediaQuery.of(context).size.height *
+                                          0.27,
+                                      child: ListView(
+                                          children: [
+                                            const SizedBox(height: 10,),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.id,
+                                              haveSign: true,
+                                            ),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.opiNum,
+                                              haveSign: true,
+                                            ),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.invNum,
+                                              haveSign: true,
+                                            ),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.amoPaid,
+                                              haveSign: true,
+                                            ),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.income,
+                                              haveSign: true,
+                                            ),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.tax,
+                                              haveSign: true,
+                                            ),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.fees,
+                                              haveSign: true,
+                                            ),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.total,
+                                              haveSign: true,
+                                            ),
+                                            NearestDateFlag(
+                                              nearestDateModel: null,
+                                              title: AppLocalizations.of(context)!.date,
+                                              haveSign: true,
+                                            ),
+                                          ]),
                                     )
                                   ],
                                 ),

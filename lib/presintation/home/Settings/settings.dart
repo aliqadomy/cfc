@@ -1,6 +1,7 @@
 import 'package:cfc_main/core/appColor.dart';
 import 'package:cfc_main/presintation/home/Settings/setting_fileds.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -113,7 +114,6 @@ await prefs.remove('remeberToken');
             icon: const Icon(Icons.call),
             mainButton: IconButton(
               onPressed: () async {
-                // Show dialog using showDialog function
                 showDialog(
                   context: context, // Ensure that context is passed here
                   barrierDismissible:
@@ -168,10 +168,28 @@ await prefs.remove('remeberToken');
                                         onTap: () async {
                                           await _launchEmail("care@cfc.sa");
                                         },
-                                        child: Text("email"),
+                                        child: const Text("E-mail"),
                                       ),
                                     ],
                                   ),
+                                  const SizedBox(height: 6),
+                                  GestureDetector(
+                                    onTap: ()async{
+                                     await _launchTwitter('cfinancec');
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/twitter.png',
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text('Twitter'),
+                                      ],
+                                    ),
+                                  ),
+
                                 ],
                               ),
                             ),
@@ -255,12 +273,23 @@ await prefs.remove('remeberToken');
   }
 
   Future<void> _launchWhatsApp(String phoneNumber) async {
-    final url = 'https://wa.me/$phoneNumber'; // WhatsApp URL format
+    final cleanedNumber = phoneNumber.replaceAll(RegExp(r'\D'), '');
+    String formattedNumber;
 
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (cleanedNumber.startsWith('0')) {
+      formattedNumber = '966${cleanedNumber.substring(1)}';
+    } else if (!cleanedNumber.startsWith('966')) {
+      formattedNumber = '966$cleanedNumber';
     } else {
-      throw 'Could not open WhatsApp';
+      formattedNumber = cleanedNumber;
+    }
+
+    final Uri url = Uri.parse('https://wa.me/$formattedNumber');
+
+
+
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
     }
   }
 
@@ -271,6 +300,16 @@ await prefs.remove('remeberToken');
       await launch(url);
     } else {
       throw 'Could not open email client';
+    }
+  }
+
+
+  Future<void> _launchTwitter(String username) async {
+    final String cleanUsername = username.replaceAll('@', '').trim();
+    final Uri url = Uri.parse('https://twitter.com/$cleanUsername');
+
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch Twitter profile');
     }
   }
 

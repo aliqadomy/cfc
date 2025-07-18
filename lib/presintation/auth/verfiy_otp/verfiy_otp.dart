@@ -127,7 +127,7 @@ class _VerfiyOtpState extends State<VerfiyOtp> {
                     :Center(
                   child: CustomButton(
                     AppColors.green,
-                    AppLocalizations.of(context)!.fPass,
+                    AppLocalizations.of(context)!.vOtp,
                     AppColors.white,
                         ()async{
                       SharedPreferences prefs=await SharedPreferences.getInstance();
