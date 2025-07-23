@@ -138,6 +138,7 @@
   "save": "Save",
   "yes": "Yes",
   "no": "No",
-  "investemntWallet" : "Investment"
+  "investemntWallet" : "Investment",
+  "returns": "Returns ROI"
 
 }

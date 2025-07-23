@@ -1,12 +1,9 @@
-import 'dart:ffi';
-
 import 'package:cfc_main/domain/model/MeModel.dart';
 import 'package:cfc_main/domain/model/kyc/ShowKyc.dart';
 import 'package:cfc_main/domain/model/wallet/banks.dart';
 import 'package:cfc_main/presintation/home/MyOpportunities/watheqBloc/watheq_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../core/appColor.dart';
 import '../../commonWidget/CutsomButton.dart';
@@ -77,11 +74,11 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
   String englishName = "";
 
   void mapKycDataToFields(List<ShowKyc> response) {
-    print("heree $response");
+
     for (var section in response) {
       section.infoType?.forEach((info) {
         info.detail?.forEach((detail) {
-          final title = detail.title ?? '';
+          final title = detail.title;
           final value = detail.value;
           switch (title) {
             case 'البريد الالكتروني':
@@ -125,7 +122,9 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
 
             case 'المنطقة':
             case 'Region':
-              _selectedRegion = (int.parse(value!)).toString();
+
+            _selectedRegion= _dropdownRegions[int.tryParse(value!)!-1];
+            print("zzzzzzzxxxxxxxx $_selectedRegion");
               break;
 
             case 'نوع الهوية':
@@ -159,7 +158,9 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
               break;
 
             case 'Bank Name':
-              _bank = (int.parse(value!) - 1).toString();
+              _bankIndex = (int.parse(value!));
+              _bank= Banks.banks[(_bankIndex!-1)]['nameAr'];
+
               break;
 
             case 'الدخل السنوي اكبر من 100,000 ريال':
@@ -283,8 +284,6 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
               setState(() {
                 isLoading = true;
               });
-            } else {
-              print("heree");
             }
           },
           child: BlocBuilder<MeBloc, MeState>(
@@ -475,6 +474,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                         ? BlocListener<ModefiyKycBloc, ModefiyKycState>(
                             listener: (context, state) {
                               if (state is ShowKycSuccess) {
+                            print(state);
                                 mapKycDataToFields(state.showKyc);
                               }
                             },
@@ -645,6 +645,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                               ? const SizedBox()
                                               : GestureDetector(
                                                   onTap: () {
+                                                    print("qqqqqqqq ${(_selectedRegionIndex! + 1).toString()}");
                                                     BlocProvider.of<ModefiyKycBloc>(context).add(ModefiyKycEvents(
                                                         email: emailController
                                                             .text,
@@ -659,7 +660,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                                 .text,
                                                         gender: (int.tryParse(_genderStatus!)! + 1)
                                                             .toString(),
-                                                        region: (int.tryParse(_selectedRegion!)! + 1)
+                                                        region: (_selectedRegionIndex! + 1)
                                                             .toString(),
                                                         jobStatus:
                                                             (int.tryParse(_jobStatus!)! + 1)
@@ -668,10 +669,10 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                             nationalityLocationController
                                                                 .text,
                                                         identityType:
-                                                            (_individualIdentityStatus! + 1)
+                                                            (_individualIdentityInt! + 1)
                                                                 .toString(),
                                                         nationality: nationalityLocationController.text,
-                                                        bank: (int.tryParse(_bank!)! + 1).toString(),
+                                                        bank: (_bankIndex!).toString(),
                                                         date: dateController.text,
                                                         idNumber: idNumberController.text,
                                                         iban: ibanController.text,
@@ -827,7 +828,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                         content: Form(
                                           key: info_ind_key,
                                           child: SizedBox(
-                                              height: 770,
+                                              height: MediaQuery.of(context).size.height*0.78,
                                               child: Column(
                                                 children: [
                                                   Column(
@@ -910,7 +911,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                     ],
                                                   ),
                                                   SizedBox(
-                                                    height: 100,
+                                                             height: MediaQuery.of(context).size.height*0.1,
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -993,7 +994,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                     ),
                                                   ),
                                                   SizedBox(
-                                                    height: 100,
+                                                    height: MediaQuery.of(context).size.height*0.1,
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -1015,12 +1016,12 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                         DropdownButtonFormField<
                                                             String>(
                                                           isExpanded: true,
-                                                          value: _educationStatus ==
+                                                          value: _genderStatus ==
                                                                   null
                                                               ? null
                                                               : _dropdownGender[
                                                                   int.tryParse(
-                                                                      _educationStatus!)!],
+                                                                      _genderStatus!)!],
                                                           hint: Text(
                                                             _genderStatus ==
                                                                     null
@@ -1155,74 +1156,39 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                       const SizedBox(
                                                         height: 5,
                                                       ),
-                                                      DropdownButtonFormField<
-                                                          String>(
-                                                        value: _selectedRegion ==
-                                                                null
-                                                            ? null
-                                                            : _dropdownRegions[
-                                                                int.tryParse(
-                                                                    _selectedRegion!)!],
+                                                      DropdownButtonFormField<String>(
+                                                        value: _selectedRegion,
                                                         isExpanded: true,
-                                                        hint: Text(
-                                                          _selectedRegion ==
-                                                                      null ||
-                                                                  _selectedRegion!
-                                                                      .isEmpty
-                                                              ? "Select Region" // Default hint when no selection
-                                                              : _dropdownRegions[int
-                                                                      .tryParse(
-                                                                          _selectedRegion!) ??
-                                                                  0], // Safe parsing
-                                                        ),
-                                                        onChanged:
-                                                            (String? newValue) {
+                                                        hint: const Text("Select Region"),
+                                                        onChanged: (String? newValue) {
                                                           setState(() {
-                                                            // Store the index of the selected marital status
-                                                            _selectedRegionIndex =
-                                                                _dropdownRegions
-                                                                    .indexOf(
-                                                                        newValue!);
-                                                            // Store the index as a string in _selectedMaritalStatus
-                                                            _selectedRegion =
-                                                                _selectedRegionIndex
-                                                                    .toString();
+                                                            _selectedRegion = newValue;
+                                                            _selectedRegionIndex = _dropdownRegions.indexOf(newValue!);
                                                           });
                                                         },
                                                         validator: (value) {
-                                                          if (value == null ||
-                                                              value.isEmpty) {
+                                                          if (value == null || value.isEmpty) {
                                                             return 'Please select an option';
                                                           }
                                                           return null;
                                                         },
-                                                        items: _dropdownRegions
-                                                            .map<
-                                                                DropdownMenuItem<
-                                                                    String>>(
-                                                          (String value) {
-                                                            return DropdownMenuItem<
-                                                                    String>(
-                                                                value: value,
-                                                                child: Text(
-                                                                  value,
-                                                                  textScaleFactor: MediaQuery.of(
-                                                                          context)
-                                                                      .textScaleFactor
-                                                                      .clamp(
-                                                                          1.0,
-                                                                          1.2),
-                                                                  style: const TextStyle(
-                                                                      fontSize:
-                                                                          16),
-                                                                ));
-                                                          },
-                                                        ).toList(),
+                                                        items: _dropdownRegions.map<DropdownMenuItem<String>>((String value) {
+                                                          return DropdownMenuItem<String>(
+                                                            value: value,
+                                                            child: Text(
+                                                              value,
+                                                              textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2),
+                                                              style: const TextStyle(fontSize: 16),
+                                                            ),
+                                                          );
+                                                        }).toList(),
                                                       ),
+
+
                                                     ],
                                                   ),
                                                   const SizedBox(
-                                                    height: 50,
+                                                    height: 25,
                                                   ),
                                                   SizedBox(
                                                     height: 110,
@@ -1273,6 +1239,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                           height: 5,
                                                         ),
                                                         Customtextinput(
+
                                                           hintText:
                                                               'National Address',
                                                           controller:
@@ -1282,6 +1249,9 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                             if (value == null ||
                                                                 value.isEmpty) {
                                                               return 'This field is required'; // Fix "Filed" to "Field"
+                                                            }
+                                                            if (value.length > 8) {
+                                                              return 'Max 8 characters';
                                                             }
                                                             return null;
                                                           },
@@ -1528,7 +1498,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                     child: Column(
                                                       children: [
                                                         SizedBox(
-                                                          height: 90,
+                                                          height: MediaQuery.of(context).size.height*0.12,
                                                           child: Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
@@ -1550,7 +1520,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                           ),
                                                         ),
                                                         SizedBox(
-                                                            height: 90,
+                                                            height: MediaQuery.of(context).size.height*0.12,
                                                             child: Column(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
@@ -1585,11 +1555,70 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                         content: Form(
                                           key: person_info_fini,
                                           child: SizedBox(
-                                              height: 330,
+                                              height: MediaQuery.of(context).size.height*0.35,
                                               child: Column(
                                                 children: [
                                                   SizedBox(
-                                                    height: 110,
+                                                    height: MediaQuery.of(context).size.height*0.12,
+                                                    width:
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .start,
+                                                      children: [
+                                                        Text(AppLocalizations.of(context)!.bank),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        DropdownButtonFormField<
+                                                            String>(
+                                                          isExpanded: true,
+                                                          value: _bankIndex != null
+                                                              ? Banks.banks[(_bankIndex!-1)]
+                                                          ['nameAr']
+                                                              : null,
+                                                          hint: const Text(
+                                                              "Bank Name"),
+                                                          onChanged:
+                                                              (newValue) {
+                                                            final index = Banks.banks.indexWhere((bank) =>
+                                                            bank['nameAr'] == newValue || bank['nameEn'] == newValue);
+                                                            setState(() {
+                                                              _bankIndex = index +1 ;
+                                                              print("zzzzzzzzeeeee ${_bankIndex}");
+                                                              _bank = newValue;
+                                                            });
+                                                          },
+                                                          validator: (value) {
+                                                            if (value == null ||
+                                                                value.isEmpty) {
+                                                              return 'Please select an option';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          items: Banks.banks.map<
+                                                              DropdownMenuItem<
+                                                                  String>>(
+                                                                  (Map<String,
+                                                                  String>
+                                                              bank) {
+                                                                return DropdownMenuItem<
+                                                                    String>(
+                                                                  value: bank[
+                                                                  'nameAr'],
+                                                                  child: Text(bank[
+                                                                  'nameAr']!),
+                                                                );
+                                                              }).toList(),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: MediaQuery.of(context).size.height*0.12,
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -1626,72 +1655,9 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                       ],
                                                     ),
                                                   ),
+
                                                   SizedBox(
-                                                    height: 100,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        const Text("Bank Name"),
-                                                        const SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        DropdownButtonFormField<
-                                                            String>(
-                                                          isExpanded: true,
-                                                          value: _bank != null
-                                                              ? Banks.banks[int
-                                                                      .tryParse(
-                                                                          _bank ??
-                                                                              "0")!]
-                                                                  ['nameAr']
-                                                              : null,
-                                                          hint: const Text(
-                                                              "Bank Name"),
-                                                          onChanged:
-                                                              (newValue) {
-                                                            setState(() {
-                                                              _bank = newValue;
-                                                              _bankIndex = Banks
-                                                                  .banks
-                                                                  .indexWhere((bank) =>
-                                                                      bank[
-                                                                          'nameAr'] ==
-                                                                      newValue);
-                                                            });
-                                                          },
-                                                          validator: (value) {
-                                                            if (value == null ||
-                                                                value.isEmpty) {
-                                                              return 'Please select an option';
-                                                            }
-                                                            return null;
-                                                          },
-                                                          items: Banks.banks.map<
-                                                                  DropdownMenuItem<
-                                                                      String>>(
-                                                              (Map<String,
-                                                                      String>
-                                                                  bank) {
-                                                            return DropdownMenuItem<
-                                                                String>(
-                                                              value: bank[
-                                                                  'nameAr'],
-                                                              child: Text(bank[
-                                                                  'nameAr']!),
-                                                            );
-                                                          }).toList(),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 100,
+                                                             height: MediaQuery.of(context).size.height*0.1,
                                                     child: radioButtonIncome(
                                                       AppLocalizations.of(
                                                               context)!
@@ -1885,7 +1851,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                 height: 10,
                                               ),
                                               SizedBox(
-                                                height: 140,
+                                                height: MediaQuery.of(context).size.height*0.14,
                                                 child: radioButtonIncome(
                                                   "الموافقة على اتفاقية الوكالة بالاستثمار",
                                                   selectedAnswerWkaleh!,

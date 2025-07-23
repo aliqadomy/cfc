@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../domain/model/wallet/banks.dart';
 import '../../commonWidget/customTextInput.dart';
 import 'kycBloc/kyc_bloc.dart';
 
@@ -31,7 +32,8 @@ class _MyprofileState extends State<Myprofile> {
     super.initState();
   }
 
-  final List<String> _dropdownMartialStatus = ['متزوج', 'اعزب', 'مطلق', 'ارمل'];
+  final List<String> _dropdownMartialStatus =
+  ['متزوج', 'اعزب', 'مطلق', 'ارمل'];
   final List<String> _dropdownRegions = [
     'الرياض',
     'المنطقة الشرقية',
@@ -67,7 +69,9 @@ class _MyprofileState extends State<Myprofile> {
     'ثانوية عامة',
     'اخرى'
   ];
-  final List<String> _dropdownGender = ["ذكر", "انثى"];
+  final List<String> _dropdownGender = [
+    "ذكر",
+    "انثى"];
 
   @override
   Widget build(BuildContext context) {
@@ -78,483 +82,577 @@ class _MyprofileState extends State<Myprofile> {
             child: ListView(shrinkWrap: true, children: [
               BlocBuilder<KycBloc, KycState>(builder: (context, state) {
                 if (state is KycStateSuccess) {
-                  return state.list[1].infoType![0]
-                      .detail![5].value==null?
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10,top: 100),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircleAvatar(
-                          radius: 70,
-                          child: Icon(
-                            Icons.person,
-                            size: 100,
+                  return state.list[1].infoType![0].detail![5].value == null
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 100),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const CircleAvatar(
+                                radius: 70,
+                                child: Icon(
+                                  Icons.person,
+                                  size: 100,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Customtextinput(
+                                hintText: username,
+                                secure: false,
+                                readOnly: true,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Customtextinput(
+                                hintText: mobileNumber,
+                                secure: false,
+                                readOnly: true,
+                              ),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2),
+                              Text(
+                                AppLocalizations.of(context)!.applyNow,
+                                style: const TextStyle(color: Colors.red),
+                              )
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Customtextinput(
-                          hintText: username,
-                          secure: false,
-                          readOnly: true,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Customtextinput(
-                          hintText: mobileNumber,
-                          secure: false,
-                          readOnly: true,
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.2),
-                        Text(
-                          AppLocalizations.of(context)!.applyNow,
-                          style: const TextStyle(color: Colors.red),
                         )
-                      ],
-                    ),
-                  ):Stepper(
-                      physics: const ClampingScrollPhysics(),
-                      type: StepperType.vertical,
-                      currentStep: currentStep,
-                      onStepTapped: (int index) {
-                        setState(() {
-                          currentStep =
-                              index; // Directly set currentStep to tapped index
-                        });
-                      },
-                      onStepContinue: () {
-                        // Check if we are not on the last step, then increment the currentStep
-                        if (currentStep < 4) {
-                          // Since we have 5 steps (0 to 4)
-                          setState(() {
-                            currentStep += 1;
-                          });
-                        }
-                      },
-                      onStepCancel: () {
-                        // Check if we're not already on the first step, then decrement the currentStep
-                        if (currentStep > 0) {
-                          setState(() {
-                            currentStep -= 1;
-                          });
-                        }
-                      },
-                      steps: [
-                        Step(
-                            isActive: currentStep == 0,
-                            title:
-                                Text(AppLocalizations.of(context)!.accInfoKyc),
-                            content: SizedBox(
-                                height: 200,
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .email),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: state.list[0].infoType?[1]
-                                                .detail?[0].value,
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .mobNum),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: state.list[0].infoType?[1]
-                                                .detail?[1].value,
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ))),
-                        Step(
-                            isActive: currentStep == 1,
-                            title: Text(
-                                AppLocalizations.of(context)!.personalInfoKyc),
-                            content: SizedBox(
-                                height: 700,
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .gender),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: _dropdownGender[int.tryParse(state.list[1].infoType![0]
-                                                .detail![0].value!)!-1],
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .maritalStatus),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: _dropdownMartialStatus[int.tryParse(state.list[1].infoType![0]
-                                                .detail![0].value!)!-1],
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .educationStatus),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            hintText: _dropdownEducation[int.tryParse(state.list[1].infoType![0]
-                                                .detail![0].value!)!-1],
-                                            secure: false,
-                                            readOnly: true,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .jobStatus),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            hintText:_dropdownJobStatus[int.tryParse(state.list[1].infoType![0]
-                                                .detail![0].value!)!-1],
-                                            secure: false,
-                                            readOnly: true,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .familyMem),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            hintText: state.list[1].infoType?[0]
-                                                .detail?[4].value ,
-                                            secure: false,
-                                            readOnly: true,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .natAddress),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: state.list[1].infoType![0]
-                                                .detail![5].value!,
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .region),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: getNational(state
-                                                .list[1]
-                                                .infoType![0]
-                                                .detail![6]
-                                                .value!),
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ))),
-                        Step(
-                            isActive: currentStep == 2,
-                            title: Text(
-                                AppLocalizations.of(context)!.personalInfoYaq),
-                            content: SizedBox(
-                                height: 500,
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .nationalId),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: state.list[2].infoType![1]
-                                                .detail![1].value,
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .identityType),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: getNationalType(state
-                                                .list[2]
-                                                .infoType![1]
-                                                .detail![4]
-                                                .value),
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .bthDate),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: state.list[2].infoType![1]
-                                                            .detail![5].value ==
-                                                        "" ||
-                                                    state.list[2].infoType![1]
-                                                            .detail![5].value ==
-                                                        null
-                                                ? "${state.list[2].infoType![1].detail![4].value}-${state.list[2].infoType![1].detail![3].value}-${state.list[2].infoType![1].detail![2].value}"
-                                                : state.list[2].infoType![1]
-                                                    .detail![5].value,
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .nameE),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: state.list[2].infoType![1]
-                                                .detail![6].value,
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .nameA),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: state.list[2].infoType![1]
-                                                .detail![7].value,
-                                            secure: false,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ))),
-                        Step(
-                            isActive: currentStep == 3,
-                            title: Text(
-                                AppLocalizations.of(context)!.personalInfoFinc),
-                            content: SizedBox(
-                                height: 200,
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 100,
+                      : Stepper(
+                          physics: const ClampingScrollPhysics(),
+                          type: StepperType.vertical,
+                          currentStep: currentStep,
+                          onStepTapped: (int index) {
+                            setState(() {
+                              currentStep =
+                                  index; // Directly set currentStep to tapped index
+                            });
+                          },
+                          onStepContinue: () {
+                            // Check if we are not on the last step, then increment the currentStep
+                            if (currentStep < 4) {
+                              // Since we have 5 steps (0 to 4)
+                              setState(() {
+                                currentStep += 1;
+                              });
+                            }
+                          },
+                          onStepCancel: () {
+                            // Check if we're not already on the first step, then decrement the currentStep
+                            if (currentStep > 0) {
+                              setState(() {
+                                currentStep -= 1;
+                              });
+                            }
+                          },
+                          steps: [
+                              Step(
+                                  isActive: currentStep == 0,
+                                  title: Text(
+                                      AppLocalizations.of(context)!.accInfoKyc),
+                                  content: SizedBox(
+                                    height: MediaQuery.of(context).size.height*0.27,
                                       child: Column(
                                         children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .bankNum),
-                                          const SizedBox(
-                                            height: 5,
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.13,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .email),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: state
+                                                      .list[0]
+                                                      .infoType?[1]
+                                                      .detail?[0]
+                                                      .value,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          Customtextinput(
-                                            readOnly: true,
-                                            hintText: state.list[3].infoType![1]
-                                                .detail![0].value,
-                                            secure: false,
+                                          SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .mobNum),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: state
+                                                      .list[0]
+                                                      .infoType?[1]
+                                                      .detail?[1]
+                                                      .value,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ))),
+                              Step(
+                                  isActive: currentStep == 1,
+                                  title: Text(AppLocalizations.of(context)!
+                                      .personalInfoKyc),
+                                  content: SizedBox(
+                                     height: MediaQuery.of(context).size.height*0.87,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .gender),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: _dropdownGender[
+                                                      int.tryParse(state
+                                                              .list[1]
+                                                              .infoType![0]
+                                                              .detail![2]
+                                                              .value!)!-1],
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .maritalStatus),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText:
+                                                      _dropdownMartialStatus[
+                                                          int.tryParse(state
+                                                                  .list[1]
+                                                                  .infoType![0]
+                                                                  .detail![0]
+                                                                  .value!)! -
+                                                              1],
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .educationStatus),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  hintText: _dropdownEducation[
+                                                      int.tryParse(state
+                                                          .list[1]
+                                                          .infoType![0]
+                                                          .detail![3]
+                                                          .value!)!],
+                                                  secure: false,
+                                                  readOnly: true,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .jobStatus),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  hintText: _dropdownJobStatus[
+                                                      int.tryParse(state
+                                                          .list[1]
+                                                          .infoType![0]
+                                                          .detail![4]
+                                                          .value!)!-1],
+                                                  secure: false,
+                                                  readOnly: true,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .familyMem),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  hintText: (int.tryParse(state
+                                                              .list[1]
+                                                              .infoType![0]
+                                                              .detail![1]
+                                                              .value!)!)
+                                                      .toString(),
+                                                  secure: false,
+                                                  readOnly: true,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .natAddress),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: state
+                                                      .list[1]
+                                                      .infoType![0]
+                                                      .detail![5]
+                                                      .value!,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .region),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: _dropdownRegions[
+                                                  int.tryParse(state
+                                                      .list[1]
+                                                      .infoType![0]
+                                                      .detail![6]
+                                                      .value!)!-1
+                                                  ],
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        height: 100,
-                                        child: radioButton(
-                                            state.list[3].infoType![1]
-                                                .detail![2].value!,
-                                            AppLocalizations.of(context)!
-                                                .annuIncme)),
-                                  ],
-                                ))),
-                        Step(
-                            isActive: currentStep == 3,
-                            title: Text(AppLocalizations.of(context)!.quest),
-                            content: SizedBox(
-                                height: 970,
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                        height: 130,
-                                        child: radioButton(
-                                            state.list[4].infoType![0]
-                                                .detail![0].value!,
-                                            "هل سبق لكم العمل في القطاع المالي خلال السنوات الخمس الماضيه ؟")),
-                                    SizedBox(
-                                        height: 130,
-                                        child: radioButton(
-                                            state.list[4].infoType![0]
-                                                .detail![1].value!,
-                                            " ؟ هل لديك اي خبرات عملية اخرى ذات صلة بالقطاع المالي")),
-                                    SizedBox(
-                                        height: 130,
-                                        child: radioButton(
-                                            state.list[4].infoType![0]
-                                                .detail![2].value!,
-                                            "هل انت عضو في مجلس ادارة او لجنه مراجعة او احد الكبار التنفيذين في شركة مدرجة ")),
-                                    SizedBox(
-                                        height: 130,
-                                        child: radioButton(
-                                            state.list[4].infoType![0]
-                                                .detail![3].value!,
-                                            "هل انت ذو علاقة بعضو مجلس ادارة او لجنة مراجهة او احد الكبار التنفيذين في شركة مدرجة؟ ")),
-                                    SizedBox(
-                                        height: 130,
-                                        child: radioButton(
-                                            state.list[4].infoType![0]
-                                                .detail![4].value!,
-                                            "هل انت مكلف مهمات عليا في المملكة او دولة اجنبية او مناصب ادارية عليا او وظيفة في المنظمات الدولية ؟ ")),
-                                    SizedBox(
-                                        height: 170,
-                                        child: radioButton(
-                                            state.list[4].infoType![0]
-                                                .detail![5].value!,
-                                            "هل لديك صلة قرابة برابطة الدم او الزواج وصولا الي الدرجة الثانية او مقربا من شخص مكلف بمهمات عليا في المملكة او دولة اجنبية او مناصب اداة عليا او في وظيفة في المنظمات الدولية ؟ ")),
-                                    SizedBox(
-                                        height: 140,
-                                        child: radioButton(
-                                            state.list[4].infoType![0]
-                                                .detail![7].value!,
-                                            "هل لديك شهادة التعامل بالاوراق المالية ؟ ")),
-                                  ],
-                                ))),
-                      ]);
+                                      ))),
+                              Step(
+                                  isActive: currentStep == 2,
+                                  title: Text(AppLocalizations.of(context)!
+                                      .personalInfoYaq),
+                                  content: SizedBox(
+                                      height: MediaQuery.of(context).size.height*0.6,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .nationalId),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: state
+                                                      .list[2]
+                                                      .infoType![1]
+                                                      .detail![1]
+                                                      .value,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .identityType),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: _dropdownIndividualIdentityType[int.tryParse(state.list[2].infoType![1]
+                                                      .detail![0].value!)!-1]
+                                                  ,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .bthDate),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: state
+                                                                  .list[2]
+                                                                  .infoType![1]
+                                                                  .detail![5]
+                                                                  .value ==
+                                                              "" ||
+                                                          state
+                                                                  .list[2]
+                                                                  .infoType![1]
+                                                                  .detail![5]
+                                                                  .value ==
+                                                              null
+                                                      ? "${state.list[2].infoType![1].detail![4].value}-${state.list[2].infoType![1].detail![3].value}-${state.list[2].infoType![1].detail![2].value}"
+                                                      : state
+                                                          .list[2]
+                                                          .infoType![1]
+                                                          .detail![5]
+                                                          .value,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .nameE),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: state
+                                                      .list[2]
+                                                      .infoType![1]
+                                                      .detail![6]
+                                                      .value,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .nameA),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: state
+                                                      .list[2]
+                                                      .infoType![1]
+                                                      .detail![7]
+                                                      .value,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ))),
+                              Step(
+                                  isActive: currentStep == 3,
+                                  title: Text(AppLocalizations.of(context)!
+                                      .personalInfoFinc),
+                                  content: SizedBox(
+                                      height: MediaQuery.of(context).size.height*0.35,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.12,
+                                            width:
+                                            MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .start,
+                                              children: [
+                                                Text(AppLocalizations.of(context)!.bank),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText:Banks.banks[int.tryParse(state.list[3].infoType![1]
+                                                      .detail![1].value!)!-1]
+                                                  ['nameAr'] ,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                                     height: MediaQuery.of(context).size.height*0.12,
+                                            child: Column(
+                                              children: [
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .bankNum),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Customtextinput(
+                                                  readOnly: true,
+                                                  hintText: state
+                                                      .list[3]
+                                                      .infoType![1]
+                                                      .detail![0]
+                                                      .value,
+                                                  secure: false,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                              height: MediaQuery.of(context).size.height*0.11,
+                                              child: radioButton(
+                                                  state.list[3].infoType![1]
+                                                      .detail![2].value!,
+                                                  AppLocalizations.of(context)!
+                                                      .annuIncme)),
+                                        ],
+                                      ))),
+                              Step(
+                                  isActive: currentStep == 3,
+                                  title:
+                                      Text(AppLocalizations.of(context)!.quest),
+                                  content: SizedBox(
+                                      height: 970,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                              height: 130,
+                                              child: radioButton(
+                                                  state.list[4].infoType![0]
+                                                      .detail![0].value!,
+                                                  "هل سبق لكم العمل في القطاع المالي خلال السنوات الخمس الماضيه ؟")),
+                                          SizedBox(
+                                              height: 130,
+                                              child: radioButton(
+                                                  state.list[4].infoType![0]
+                                                      .detail![1].value!,
+                                                  " ؟ هل لديك اي خبرات عملية اخرى ذات صلة بالقطاع المالي")),
+                                          SizedBox(
+                                              height: 130,
+                                              child: radioButton(
+                                                  state.list[4].infoType![0]
+                                                      .detail![2].value!,
+                                                  "هل انت عضو في مجلس ادارة او لجنه مراجعة او احد الكبار التنفيذين في شركة مدرجة ")),
+                                          SizedBox(
+                                              height: 130,
+                                              child: radioButton(
+                                                  state.list[4].infoType![0]
+                                                      .detail![3].value!,
+                                                  "هل انت ذو علاقة بعضو مجلس ادارة او لجنة مراجهة او احد الكبار التنفيذين في شركة مدرجة؟ ")),
+                                          SizedBox(
+                                              height: 130,
+                                              child: radioButton(
+                                                  state.list[4].infoType![0]
+                                                      .detail![4].value!,
+                                                  "هل انت مكلف مهمات عليا في المملكة او دولة اجنبية او مناصب ادارية عليا او وظيفة في المنظمات الدولية ؟ ")),
+                                          SizedBox(
+                                              height: 170,
+                                              child: radioButton(
+                                                  state.list[4].infoType![0]
+                                                      .detail![5].value!,
+                                                  "هل لديك صلة قرابة برابطة الدم او الزواج وصولا الي الدرجة الثانية او مقربا من شخص مكلف بمهمات عليا في المملكة او دولة اجنبية او مناصب اداة عليا او في وظيفة في المنظمات الدولية ؟ ")),
+                                          SizedBox(
+                                              height: 140,
+                                              child: radioButton(
+                                                  state.list[4].infoType![0]
+                                                      .detail![7].value!,
+                                                  "هل لديك شهادة التعامل بالاوراق المالية ؟ ")),
+                                        ],
+                                      ))),
+                            ]);
                 } else if (state is KycStateFailed) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
@@ -645,7 +743,6 @@ class _MyprofileState extends State<Myprofile> {
   }
 
   radioButton(String selectedAnswer, String text) {
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

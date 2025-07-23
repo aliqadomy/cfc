@@ -203,13 +203,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                                     BorderRadius.circular(16),
                                                 color: AppColors.white),
                                             child: Center(
-                                                child: Text(
-                                              "${state.accountNumberModel.accountNumber}",
-                                              style: const TextStyle(
-                                                  color:
-                                                      AppColors.accountNumber,
-                                                  fontSize: 12),
-                                            )),
+                                              child: SelectableText(
+                                                "${state.accountNumberModel.accountNumber}",
+                                                style: const TextStyle(
+                                                  color: AppColors.accountNumber,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),

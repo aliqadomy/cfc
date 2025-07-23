@@ -650,20 +650,16 @@ class _WalletscreenState extends State<Walletscreen> {
                                                         },
                                                         icon: const Icon(Icons
                                                             .arrow_back_ios_new)),
-                                                    state.walletData[index].type == 1
-                                                        ? Text(
-                                                            AppLocalizations.of(
-                                                                    context)!
-                                                                .deposit)
-                                                        :state.walletData[index].type == 2 && state.walletData[index].opportunityId! >0
-                                                        ?Text(
-                                                        AppLocalizations.of(
-                                                            context)!
-                                                            .investemntWallet): Text(
+                                                    Text(
+                                                      (state.walletData[index].type == 1 && state.walletData[index].opportunityId! > 0)
+                                                          ? AppLocalizations.of(context)!.returns
+                                                          : (state.walletData[index].type == 1 && state.walletData[index].opportunityId! == 0)
+                                                          ? AppLocalizations.of(context)!.deposit
+                                                          : (state.walletData[index].type == 2 && state.walletData[index].opportunityId! > 0)
+                                                          ? AppLocalizations.of(context)!.investemntWallet
+                                                          : AppLocalizations.of(context)!.withdraw,
+                                                    )
 
-                                                            AppLocalizations.of(
-                                                                    context)!
-                                                                .withdraw),
                                                   ],
                                                 ),
                                                 state.walletData[index].type ==
