@@ -82,6 +82,7 @@ class _MyprofileState extends State<Myprofile> {
             child: ListView(shrinkWrap: true, children: [
               BlocBuilder<KycBloc, KycState>(builder: (context, state) {
                 if (state is KycStateSuccess) {
+                  // print(state.list[1].infoType[3].detail[0].value);
                   return state.list[1].infoType![0].detail![5].value == null
                       ? Padding(
                           padding: const EdgeInsets.only(
@@ -286,7 +287,7 @@ class _MyprofileState extends State<Myprofile> {
                                                           .list[1]
                                                           .infoType![0]
                                                           .detail![3]
-                                                          .value!)!],
+                                                          .value!)!-1],
                                                   secure: false,
                                                   readOnly: true,
                                                 ),

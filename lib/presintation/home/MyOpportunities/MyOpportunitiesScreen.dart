@@ -124,7 +124,6 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
             case 'Region':
 
             _selectedRegion= _dropdownRegions[int.tryParse(value!)!-1];
-            print("zzzzzzzxxxxxxxx $_selectedRegion");
               break;
 
             case 'نوع الهوية':
@@ -645,16 +644,14 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                               ? const SizedBox()
                                               : GestureDetector(
                                                   onTap: () {
-                                                    print("qqqqqqqq ${(_selectedRegionIndex! + 1).toString()}");
+                                                    print("jooooood ${(int.tryParse(_selectedMaritalStatus!)!+1).toString()}");
                                                     BlocProvider.of<ModefiyKycBloc>(context).add(ModefiyKycEvents(
                                                         email: emailController
                                                             .text,
                                                         mobileNumber:
                                                             mobileController
                                                                 .text,
-                                                        matiralStatus:
-                                                            ((int.tryParse(martialStatusController.text) ?? 0) + 1)
-                                                                .toString(),
+                                                        matiralStatus: (int.tryParse(_selectedMaritalStatus!)!+1).toString(),
                                                         familyNumber:
                                                             familyNumberController
                                                                 .text,
@@ -689,7 +686,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                         selectedAnswer: true,
                                                         englishName: englishName,
                                                         arabicName: arabicName,
-                                                        education: int.tryParse(_educationStatus!).toString()));
+                                                        education: (int.tryParse(_educationStatus!)!+1).toString()));
                                                   },
                                                   child: Container(
                                                     padding:
@@ -938,14 +935,14 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                               ? null
                                                               : _dropdownEducation[
                                                                   int.tryParse(
-                                                                      _educationStatus!)!],
+                                                                      _educationStatus!)!-1],
                                                           hint: Text(
                                                             _educationStatus ==
                                                                     null
                                                                 ? 'Select Education'
                                                                 : _dropdownEducation[
                                                                     int.tryParse(
-                                                                            _educationStatus!) ??
+                                                                            _educationStatus!)!-1 ??
                                                                         0], // Use tryParse to handle invalid numbers
                                                           ),
                                                           onChanged: (String?
@@ -1100,16 +1097,12 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                         isExpanded: true,
                                                         onChanged:
                                                             (String? newValue) {
-                                                          setState(() {
-                                                            _selectedMaritalStatusIndex =
-                                                                _dropdownMartialStatus
-                                                                    .indexOf(
-                                                                        newValue!);
-
-                                                            _selectedMaritalStatus =
-                                                                _selectedMaritalStatusIndex
-                                                                    .toString();
-                                                          });
+                                                              setState(() {
+                                                                _selectedMaritalStatusIndex =
+                                                                    _dropdownMartialStatus.indexOf(newValue!);
+                                                                _selectedMaritalStatus = _selectedMaritalStatusIndex!.toString();
+                                                                print("ooooooo $_selectedMaritalStatus");
+                                                              });
                                                         },
                                                         validator: (value) {
                                                           if (value == null ||
