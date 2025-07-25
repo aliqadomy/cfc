@@ -72,6 +72,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
   bool? selectedAnswerWkaleh = true;
   String arabicName = "";
   String englishName = "";
+  bool watheqLoading=false;
 
   void mapKycDataToFields(List<ShowKyc> response) {
 
@@ -157,8 +158,10 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
               break;
 
             case 'Bank Name':
+
               _bankIndex = (int.parse(value!));
               _bank= Banks.banks[(_bankIndex!-1)]['nameAr'];
+
 
               break;
 
@@ -644,7 +647,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                               ? const SizedBox()
                                               : GestureDetector(
                                                   onTap: () {
-                                                    print("jooooood ${(int.tryParse(_selectedMaritalStatus!)!+1).toString()}");
+                                                    print("jooooood ${dateController.text}");
                                                     BlocProvider.of<ModefiyKycBloc>(context).add(ModefiyKycEvents(
                                                         email: emailController
                                                             .text,
@@ -686,7 +689,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                         selectedAnswer: true,
                                                         englishName: englishName,
                                                         arabicName: arabicName,
-                                                        education: (int.tryParse(_educationStatus!)!+1).toString()));
+                                                        education: (int.tryParse(_educationStatus!)!).toString()));
                                                   },
                                                   child: Container(
                                                     padding:
@@ -927,66 +930,42 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                         const SizedBox(
                                                           height: 5,
                                                         ),
-                                                        DropdownButtonFormField<
-                                                            String>(
+                                                        DropdownButtonFormField<String>(
                                                           isExpanded: true,
-                                                          value: _educationStatus ==
-                                                                  null
-                                                              ? null
-                                                              : _dropdownEducation[
-                                                                  int.tryParse(
-                                                                      _educationStatus!)!-1],
-                                                          hint: Text(
-                                                            _educationStatus ==
-                                                                    null
-                                                                ? 'Select Education'
-                                                                : _dropdownEducation[
-                                                                    int.tryParse(
-                                                                            _educationStatus!)!-1 ??
-                                                                        0], // Use tryParse to handle invalid numbers
-                                                          ),
-                                                          onChanged: (String?
-                                                              newValue) {
-                                                            setState(() {
-                                                              _educationStatusInt =
-                                                                  _dropdownEducation
-                                                                      .indexOf(
-                                                                          newValue!);
-                                                              _educationStatus =
-                                                                  _educationStatusInt
-                                                                      .toString();
-                                                            });
+                                                          value: (_educationStatus != null &&
+                                                              int.tryParse(_educationStatus!) != null &&
+                                                              int.parse(_educationStatus!) > 0 &&
+                                                              int.parse(_educationStatus!) <= _dropdownEducation.length)
+                                                              ? _dropdownEducation[int.parse(_educationStatus!) - 1]
+                                                              : null,
+                                                          hint: const Text('Select Education'),
+                                                          onChanged: (String? newValue) {
+                                                            final selectedIndex = _dropdownEducation.indexOf(newValue!);
+                                                            if (selectedIndex != -1) {
+                                                              setState(() {
+                                                                _educationStatusInt = selectedIndex;
+                                                                _educationStatus = (selectedIndex + 1).toString(); // 1-based index
+                                                              });
+                                                            }
                                                           },
                                                           validator: (value) {
-                                                            if (value == null ||
-                                                                value.isEmpty) {
+                                                            if (value == null || value.isEmpty) {
                                                               return 'Please select an option';
                                                             }
                                                             return null;
                                                           },
-                                                          items: _dropdownEducation
-                                                              .map<
-                                                                  DropdownMenuItem<
-                                                                      String>>(
-                                                            (String value) {
-                                                              return DropdownMenuItem<
-                                                                      String>(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                    value,
-                                                                    textScaleFactor: MediaQuery.of(
-                                                                            context)
-                                                                        .textScaleFactor
-                                                                        .clamp(
-                                                                            1.0,
-                                                                            1.2),
-                                                                    style: const TextStyle(
-                                                                        fontSize:
-                                                                            16),
-                                                                  ));
-                                                            },
-                                                          ).toList(),
+                                                          items: _dropdownEducation.map<DropdownMenuItem<String>>((String value) {
+                                                            return DropdownMenuItem<String>(
+                                                              value: value,
+                                                              child: Text(
+                                                                value,
+                                                                textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.2),
+                                                                style: const TextStyle(fontSize: 16),
+                                                              ),
+                                                            );
+                                                          }).toList(),
                                                         ),
+
                                                       ],
                                                     ),
                                                   ),
@@ -1405,7 +1384,11 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                           ),
                                                         ],
                                                       )),
-                                                  SizedBox(
+                                                  watheqLoading
+                                                      ? const SizedBox(
+                                                    height: 50,
+                                                    width: 150,
+                                                    child: Center(child: CircularProgressIndicator())):SizedBox(
                                                     height: 50,
                                                     width: 150,
                                                     child: CustomButton(
@@ -1415,13 +1398,14 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                                   context)!
                                                               .checkData,
                                                       onTap: () {
+                                                        setState(() {
+                                                          watheqLoading=true;
+                                                        });
                                                         if (_individualIdentityStatus ==
                                                             0) {
                                                           String inputDate =
                                                               dateController
                                                                   .text;
-
-                                                          // Define the input date format
                                                           DateFormat
                                                               inputFormat =
                                                               DateFormat(
@@ -1433,6 +1417,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
 
                                                           String outputDate =
                                                               "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}";
+
                                                           BlocProvider.of<
                                                                       WatheqBloc>(
                                                                   context)
@@ -1442,6 +1427,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                                   iqama:
                                                                       idNumberController
                                                                           .text));
+
                                                         } else {
                                                           String inputDate =
                                                               dateController
@@ -1469,6 +1455,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                                   iqama:
                                                                       idNumberController
                                                                           .text));
+
                                                         }
                                                       },
                                                     ),
@@ -1486,8 +1473,14 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                                             "${state.watheqModel!.personBasicInfo!.firstName!} ${state.watheqModel!.personBasicInfo!.fatherName!} ${state.watheqModel!.personBasicInfo!.grandFatherName!} ${state.watheqModel!.personBasicInfo!.familyName!}";
                                                         englishName =
                                                             "${state.watheqModel!.personBasicInfo!.firstNameT!} ${state.watheqModel!.personBasicInfo!.fatherNameT!} ${state.watheqModel!.personBasicInfo!.grandFatherNameT!} ${state.watheqModel!.personBasicInfo!.familyNameT!}";
-                                                      }
-                                                    },
+
+                                                          watheqLoading = false;
+
+                                                    }else if (state is WatheqStateFailed){
+              setState(() {
+              watheqLoading = false;
+              });}},
+
                                                     child: Column(
                                                       children: [
                                                         SizedBox(
@@ -1864,7 +1857,7 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                                   ]),
                             ),
                           )
-                        : const CircularProgressIndicator();
+                        : const CircularProgressIndicator(color: AppColors.green,);
               } else if (state is MeFailed) {
                 return const Center(
                     child: Text("There is SomeThing Wrong ....."));
@@ -1955,7 +1948,8 @@ class _MyopportunitiesscreenState extends State<Myopportunitiesscreen> {
                       '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
                   setState(() {
                     dateController.text =
-                        formattedHijriDate; // Display Hijri date
+                        formattedHijriDate;
+                    print(dateController.text);// Display Hijri date
                   });
                 }
                 Navigator.pop(context); // Close the dialog after selection

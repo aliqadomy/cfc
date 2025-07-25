@@ -35,7 +35,7 @@ class WatheqRepo  {
 
   Future<Either<AppException, WatheqModel>> watheqSaudiRepo(String iqama,
       String date) async {
-
+    print("heree2");
     try {
       final response = await opportunitydataprovider.watheqsaudi(iqama, date);
       if (response.data['status'] == false) {

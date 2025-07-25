@@ -26,7 +26,7 @@ class WatheqBloc extends Bloc<WatheqEvent, WatheqState> {
         );
       }else if(event is WatheqSaudi){
         emit(WatheqStateLoading());
-        var res = await watheqRepo.watheqIqamaReop(event.iqama, event.date);
+        var res = await watheqRepo.watheqSaudiRepo(event.iqama, event.date);
         print(res);
         res.fold(
               (error) {
